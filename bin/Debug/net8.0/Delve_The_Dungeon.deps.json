@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Delve_The_Dungeon/1.0.0": {
+        "runtime": {
+          "Delve_The_Dungeon.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Delve_The_Dungeon/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
