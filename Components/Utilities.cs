@@ -12,7 +12,7 @@ public class SkillCheck
 public class PlayerActions
 {
     public List<string> Actions = new List<string> { "move", "attack", "examine", "go" };
-    public List<string> Targets = new List<string> { "north", "south", "monster", "room" };
+    public List<string> Targets = new List<string> { "north", "south", "monster", "room", "down", "up" };
     public string Action { get; private set; }
     public string Target { get; private set; }
 

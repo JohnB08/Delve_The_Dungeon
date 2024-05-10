@@ -12,3 +12,4 @@ C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\
 C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\obj\Debug\net8.0\Delve_The_Dungeon.pdb
 C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\obj\Debug\net8.0\Delve_The_Dungeon.genruntimeconfig.cache
 C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\obj\Debug\net8.0\ref\Delve_The_Dungeon.dll
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\obj\Debug\net8.0\Delve_The_Dungeon.sourcelink.json
