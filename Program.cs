@@ -108,7 +108,7 @@ dungeon.AddRoomStart("You stand in a tarvern, slightly enebriated. You heard rum
         talk: true,
         mov: true,
         dodge: true,
-        cleared: "You outwitted the old drunk, and he stumbles past you to find solace in even more brown liquid."
+        cleared: "You outwitted the old drunk, and he stumbles past you to find solace in even more brown liquid.\nHe drops his blade."
     ));
 dungeon.AddRoomEnd("This is the end of your journey.", null);
 Console.WriteLine("Welcome to Delve the dungeon.");
@@ -154,6 +154,8 @@ while (currentRoom.Next != null && !gameOver)
     await Task.Delay(250);
     if (!currentRoom.Cleared) Console.WriteLine($"{currentRoom.Obstacle.Description}");
     await Task.Delay(250);
+    Console.WriteLine("For a quick introduction to how this work, try typing 'help me!'(or just help) for some simple guidance");
+    await Task.Delay(250);
     Console.WriteLine("What do you want to do?");
     string input = Console.ReadLine();
     if (input == null) continue;
@@ -166,6 +168,13 @@ while (currentRoom.Next != null && !gameOver)
             if (action.Action == "examine")
             {
                 currentRoom.Examine(player);
+                await Task.Delay(250);
+                continue;
+            }
+            if (action.Action == "help")
+            {
+                Console.WriteLine(action.Help());
+                await Task.Delay(250);
                 continue;
             }
             bool canUseAction = currentRoom.CanClearObstacle(action.Action);

@@ -1,0 +1,5 @@
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\bin\Release\net8.0\publish\Delve_The_Dungeon.exe
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\bin\Release\net8.0\publish\Delve_The_Dungeon.dll
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\bin\Release\net8.0\publish\Delve_The_Dungeon.deps.json
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\bin\Release\net8.0\publish\Delve_The_Dungeon.runtimeconfig.json
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\bin\Release\net8.0\publish\Delve_The_Dungeon.pdb

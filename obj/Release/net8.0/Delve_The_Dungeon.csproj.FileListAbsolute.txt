@@ -1,0 +1,15 @@
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\bin\Release\net8.0\Delve_The_Dungeon.exe
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\bin\Release\net8.0\Delve_The_Dungeon.deps.json
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\bin\Release\net8.0\Delve_The_Dungeon.runtimeconfig.json
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\bin\Release\net8.0\Delve_The_Dungeon.dll
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\bin\Release\net8.0\Delve_The_Dungeon.pdb
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\obj\Release\net8.0\Delve_The_Dungeon.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\obj\Release\net8.0\Delve_The_Dungeon.AssemblyInfoInputs.cache
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\obj\Release\net8.0\Delve_The_Dungeon.AssemblyInfo.cs
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\obj\Release\net8.0\Delve_The_Dungeon.csproj.CoreCompileInputs.cache
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\obj\Release\net8.0\Delve_The_Dungeon.sourcelink.json
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\obj\Release\net8.0\Delve_The_Dungeon.dll
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\obj\Release\net8.0\refint\Delve_The_Dungeon.dll
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\obj\Release\net8.0\Delve_The_Dungeon.pdb
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\obj\Release\net8.0\Delve_The_Dungeon.genruntimeconfig.cache
+C:\Users\John Ellingsen\Documents\HelgeprosjectDungeoncrawler\Delve_The_Dungeon\obj\Release\net8.0\ref\Delve_The_Dungeon.dll
