@@ -39,7 +39,27 @@ public class Obstacle
     public int Difficulty { get; set; }
     public int Attribute { get; set; }
     public string ExaminedDescription { get; set; }
-    public Treasure treasure { get; set; }
+    public Treasure Treasure { get; set; }
+    public bool Moveable { get; set; }
+    public bool Attackable { get; set; }
+    public bool Talkable { get; set; }
+    public bool Dodgeable { get; set; }
+    public string ClearedMessage { get; set; }
+    public string FailMessage { get; set; }
+    public Obstacle(string desc, int diff, int attr, string exdesc, Treasure treasure, string cleared, string fail, bool attk = false, bool talk = false, bool dodge = false, bool mov = false)
+    {
+        Description = desc;
+        Difficulty = diff;
+        Attribute = attr;
+        ExaminedDescription = exdesc;
+        Treasure = treasure;
+        Attackable = attk;
+        Talkable = talk;
+        Dodgeable = dodge;
+        Moveable = mov;
+        ClearedMessage = cleared;
+        FailMessage = fail;
+    }
 
     public bool OvercomeObstacle(Player player)
     {
@@ -66,10 +86,12 @@ public class Room
     public Room Next { get; set; }
     public Room Prev { get; set; }
     public Obstacle Obstacle { get; set; }
+    public bool Cleared { get; set; }
     public bool Examined { get; set; } = false;
-    public Room(string description)
+    public Room(string description, Obstacle obstacle, bool cleared = false, bool examined = false)
     {
         Description = description;
+        Obstacle = obstacle;
     }
     public void Examine(Player player)
     {
@@ -88,6 +110,26 @@ public class Room
             return;
         }
     }
+    public bool CanClearObstacle(string action)
+    {
+        bool obstacleClearable = false;
+        switch (action)
+        {
+            case "move":
+                obstacleClearable = Obstacle.Moveable;
+                break;
+            case "attack":
+                obstacleClearable = Obstacle.Attackable;
+                break;
+            case "talk":
+                obstacleClearable = Obstacle.Talkable;
+                break;
+            case "dogde":
+                obstacleClearable = Obstacle.Dodgeable;
+                break;
+        }
+        return obstacleClearable;
+    }
 }
 
 public class DungeonLayout
@@ -95,9 +137,9 @@ public class DungeonLayout
     public Room Start { get; private set; }
     public Room End { get; private set; }
     public int DungeonLength { get; private set; }
-    public void AddRoomStart(string desc)
+    public void AddRoomStart(string desc, Obstacle obs)
     {
-        Room newRoom = new(desc);
+        Room newRoom = new(desc, obs);
         newRoom.Next = Start;
         if (Start != null)
         {
@@ -107,54 +149,18 @@ public class DungeonLayout
         End ??= newRoom;
         DungeonLength++;
     }
-    public void AddRoomEnd(string desc)
+    public void AddRoomEnd(string desc, Obstacle obs)
     {
         if (Start == null)
         {
-            AddRoomStart(desc);
+            AddRoomStart(desc, obs);
             return;
         }
-        Room newRoom = new(desc);
+        Room newRoom = new(desc, obs);
         End.Next = newRoom;
         newRoom.Prev = End;
         End = newRoom;
         DungeonLength++;
 
     }
-    public void FillLayout()
-    {
-        List<Treasure> treasures = new List<Treasure> {
-        new Treasure(
-            "A golden ring. A faint enscription in foreign letters encircle the surface.",
-            3,
-            1,
-            "A cloud of thoughts stream into your mind, a bullrush of sensations fill your head.\nIt feels as though your head is about to burst,\nwhen suddenly it all clears.\nYou feel more in control of your mind than you have ever been before."
-        ), new Treasure(
-            "A blood covered bracelet with a sunburst jewel encrusted in its center.",
-            1,
-            1,
-            "The bracelet grips on to your arm, it feels tighter and tighters.\nYou feel a weird tingling sensation below your skin.\nYour muscles heat up, your blood boils.\nYou feel stronger."
-        ), new Treasure(
-            "A worn parrying dagger. It glows faintly in a blue hue.",
-            2,
-            1,
-            "The dagger is too worn to be effective as a weapon,\n yet as you grip the hilt a flow of memories stream into you.\nMemories of fight or flight,\nof dangerous escapades an daring doos in the night.\nYour muscle tense as you witness yourself leaping from roof top to roof top.\nYou feel lighter on your feet and ready for action."
-        ), new Treasure(
-            "A purple cape flutters in a faint breeze.",
-            3,
-            -1,
-            "The purple cape ensnares your head and neck.\nThe cloth grips hard, and you can barely breathe.\nYou feel it wrap around your eyes, your mouth, your nose and your neck.\nThe silky cloth cuts int your skin.\nYet you manage to wrestle yourself free.\nA dull ache thumps in your head."
-        ), new Treasure(
-            "A large Axe. It hums slightly on the ground.",
-            1,
-            -1,
-            "The axe wirls alive as you get closer.\n You narrowly dodges its swing on your neck,\n but you fail to fully escape it second swing as it bites into your shoulder.\nA gracing flesh-wound, but will surely leave a mark."
-        ), new Treasure(
-            "A pair of hovering boots.",
-            2,
-            -1,
-            "The boots just doesn't want to cooperate.\n You try to take a step forward, yet one boot flies backwards.\nYou get stretched in every direction and as you feel your tendons are about to rip,\nyou finally wriggle free from the shoes."
-        )};
-    }
-
 }
