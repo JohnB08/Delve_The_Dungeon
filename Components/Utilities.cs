@@ -12,7 +12,7 @@ public class SkillCheck
 public class PlayerActions
 {
     public Dictionary<string, string> Actions = new Dictionary<string, string> { { "move", "move" }, { "go", "move" }, { "run", "move" }, { "walk", "move" }, { "attack", "attack" }, { "fight", "attack" }, { "hit", "attack" }, { "look", "examine" }, { "examine", "examine" }, { "spy", "examine" }, { "scry", "examine" }, { "yes", "y" }, { "y", "y" }, { "aye", "y" }, { "ye", "y" }, { "ja", "y" }, { "no", "n" }, { "n", "n" }, { "nay", "n" }, { "nei", "n" }, { "talk", "talk" }, { "yell", "talk" }, { "whisper", "talk" }, { "fool", "talk" }, { "ruse", "talk" }, { "dodge", "dodge" }, { "roll", "dodge" }, { "evade", "dodge" }, { "trick", "talk" }, { "sure", "y" } };
-    public Dictionary<string, string> Targets = new Dictionary<string, string> { { "north", "up" }, { "backwards", "up" }, { "up", "up" }, { "south", "down" }, { "down", "down" }, { "forward", "down" } };
+    public Dictionary<string, string> Targets = new Dictionary<string, string> { { "north", "up" }, { "backwards", "up" }, { "up", "up" }, { "south", "down" }, { "down", "down" }, { "forward", "down" }, { "on", "down" } };
     public string Action { get; private set; }
     public string Target { get; private set; }
 

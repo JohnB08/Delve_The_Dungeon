@@ -8,11 +8,11 @@ PlayerActions action = new();
 DungeonLayout dungeon = new();
 
 Player player = new();
-dungeon.AddRoomEnd("You enter the kitchen.\nBehind the butcher's table there seems to indeed be an old, steep, stairwell going down into the darkness below.", new Obstacle(
-        desc: "There seems to be some gaps in the stairs going down.",
+dungeon.AddRoomEnd("You stand in the kitchen.\nBehind the butcher's table there seems to indeed be an old, steep, stairwell going down into the darkness below.", new Obstacle(
+        desc: "Dangerous tools and rusty instruments lie strewn all over this kitchen, one wrong move and it could go very bad.\nSomething is tied to the stairs, it flutters in a light breeze.",
         diff: 2,
         attr: 2,
-        exdesc: "It should be easy enough to climb the railing instead of worrying about the gaps in the stairs.",
+        exdesc: "You plot a good route through the maze of rust and sharp stuff. You feel ready to move on.",
         treasure: new Treasure(
             "A purple cape flutters in a faint breeze. It seems to have a will of its own.",
             3,
@@ -21,8 +21,8 @@ dungeon.AddRoomEnd("You enter the kitchen.\nBehind the butcher's table there see
         ),
         dodge: true,
         mov: true,
-        cleared: "You successfully climbed down the stairs, something is tied to the bottom rung.",
-        fail: "You hop, skip and jump your way down the stairs. It all goes swimmingly until you missjudge a step. \nInstead you end up falling head first into a large casket below. The brown familiar fluid fills your lungs,\n and as the world goes dark you think:'This isn't the worst way to go...'"
+        cleared: "You successfully navigated the rusty field of discared glass shards and sharp utensils. You see clearly now what's tied to the top of the stairs.",
+        fail: "You decide to just go for it, and sprints through the kitchen. You slip on some leftover, old veal.\nAfter you slide through the disregarded and broken kitchenutensils there's little to no difference between you,\nand the minced meat they serve in the stew.\n'Now that really makes me think' you say to yourself as the world fade to black."
     ));
 dungeon.AddRoomEnd("A dank and decrepit cellar. The stank of rot fills your nostrils.", new Obstacle(
         desc: "A large vat of some unspeakable gunk blocks your path.\nBelow the vat lies some unfortunate creature who probably attempted the same feat you are about to.",
@@ -40,7 +40,7 @@ dungeon.AddRoomEnd("A dank and decrepit cellar. The stank of rot fills your nost
         cleared: "You successfully moved the vat. In the remains of whomever was below it something glitters.",
         fail: "For a moment the huge var seems to give way, but then it rolls back over, trapping your leg.\nIt seems you will share the same faith as whoever or whatever else lies trapped down here with you."
     ));
-dungeon.AddRoomEnd("A cold chill creeps through you as you enter this long forgotten stony hallway, deep below. Your footsteps echo down this rocky tomb", new Obstacle(
+dungeon.AddRoomEnd("A cold chill creeps through you when you stand in this long forgotten stony hallway, deep below. Your footsteps echo down this rocky tomb", new Obstacle(
         desc: "The walls seem brittle and frail. As they would fall at any moment.",
         diff: 3,
         attr: 2,
@@ -57,7 +57,7 @@ dungeon.AddRoomEnd("A cold chill creeps through you as you enter this long forgo
         dodge: true
     ));
 dungeon.AddRoomEnd(
-    "You enter a large circular stone room.\nOld runes are carved into the stone surrounding you.\nYou see no exit, and the way you came in is now blocked. A soft clank reverberates through the hall.",
+    "You stand in a large circular stone room.\nOld runes are carved into the stone surrounding you.\nYou see no exit, and the way you came in is now blocked. A soft clank reverberates through the hall.",
     new Obstacle(
         desc: "An old mechanism seems to block your path forward. It seems partly stuck,\nyet the lever that operates it feels like it could give if you just push harder.",
         diff: 3,
@@ -76,8 +76,8 @@ dungeon.AddRoomEnd(
     )
 );
 dungeon.AddRoomEnd(
-    "You enter a large chasm, as if a blade once pierced the ground.\nBelow is nothing but darkness.\nFar ahead on the opposite side you see a faint light.", new Obstacle(
-        desc: "A long, and spindly bridge spans the chasm between you and fresh air.",
+    "This room contains a large chasm, as if a blade once pierced the ground.\nBelow is nothing but darkness.", new Obstacle(
+        desc: "A long, and spindly bridge spans the chasm.\nAt the other side you see a faint light promising freedom!",
         diff: 4,
         attr: 2,
         exdesc: "You notice some spare rope behind some rockfall, You tense the bridge abit. It seems more stable now.",
@@ -121,6 +121,7 @@ while (nameInput.Length <= 0)
 }
 player.Name = nameInput;
 Console.WriteLine("Good. Now let's make you better.\n\n");
+await Task.Delay(250);
 
 while (player.Points > 0)
 {
@@ -129,6 +130,7 @@ while (player.Points > 0)
     if (attr == null)
     {
         Console.WriteLine("Please write the attribute you would like to improve.");
+        await Task.Delay(250);
         continue;
     }
     try
@@ -139,6 +141,7 @@ while (player.Points > 0)
     catch (Exception ex)
     {
         Console.WriteLine(ex.Message);
+        await Task.Delay(250);
         continue;
     }
 }
@@ -148,7 +151,9 @@ bool gameOver = false;
 while (currentRoom.Next != null && !gameOver)
 {
     Console.WriteLine($"{currentRoom.Description}");
+    await Task.Delay(250);
     if (!currentRoom.Cleared) Console.WriteLine($"{currentRoom.Obstacle.Description}");
+    await Task.Delay(250);
     Console.WriteLine("What do you want to do?");
     string input = Console.ReadLine();
     if (input == null) continue;
@@ -167,18 +172,24 @@ while (currentRoom.Next != null && !gameOver)
             if (!canUseAction)
             {
                 Console.WriteLine("Cannot do that to get past this obstacle.");
+                await Task.Delay(250);
                 continue;
             }
             bool didObstacle = currentRoom.Obstacle.OvercomeObstacle(player);
             if (!didObstacle)
             {
                 Console.WriteLine(currentRoom.Obstacle.FailMessage);
+                await Task.Delay(250);
                 gameOver = true;
             }
             else
             {
                 Console.WriteLine(currentRoom.Obstacle.ClearedMessage);
+                await Task.Delay(250);
+                Console.WriteLine(currentRoom.Obstacle.Treasure.Description);
+                await Task.Delay(250);
                 Console.WriteLine("Do you want to equip the treasure?");
+                await Task.Delay(250);
                 input = Console.ReadLine();
                 if (input != null)
                 {
@@ -186,6 +197,7 @@ while (currentRoom.Next != null && !gameOver)
                     if (action.Action != "y")
                     {
                         Console.WriteLine("Very well!");
+                        await Task.Delay(250);
                         currentRoom.Cleared = true;
                         continue;
                     }
@@ -200,6 +212,7 @@ while (currentRoom.Next != null && !gameOver)
                 {
                     Console.WriteLine("Indecisive, huh? We'll discard this item for now.");
                     currentRoom.Cleared = true;
+                    await Task.Delay(250);
                     continue;
                 }
             }
@@ -213,11 +226,13 @@ while (currentRoom.Next != null && !gameOver)
                     if (currentRoom.Prev != null)
                     {
                         currentRoom = currentRoom.Prev;
+                        await Task.Delay(250);
                         continue;
                     }
                     else
                     {
                         Console.WriteLine("Cannot go this way.");
+                        await Task.Delay(250);
                         continue;
                     }
                 }
@@ -226,23 +241,28 @@ while (currentRoom.Next != null && !gameOver)
                     if (currentRoom.Next != null)
                     {
                         currentRoom = currentRoom.Next;
+                        await Task.Delay(250);
                         continue;
                     }
                     else
                     {
                         Console.WriteLine("Cannot go this way.");
+                        await Task.Delay(250);
                         continue;
                     }
                 }
                 else
                 {
                     Console.WriteLine("That's not a valid direction.");
+                    await Task.Delay(250);
                     continue;
                 }
             }
             else
             {
                 Console.WriteLine("There's nothing else to do in this room, better move on.");
+                await Task.Delay(250);
+                continue;
             }
         }
     }
