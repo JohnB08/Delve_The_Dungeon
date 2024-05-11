@@ -269,3 +269,5 @@ while (currentRoom.Next != null && !gameOver)
 }
 currentRoom = dungeon.End;
 Console.WriteLine(currentRoom.Description);
+Console.WriteLine("Thanks for playing, press any button to exit the game.");
+Console.ReadLine();
