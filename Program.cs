@@ -167,7 +167,7 @@ while (currentRoom?.Next != null && !gameOver)
     await Task.Delay(250);
     Console.WriteLine("For a quick introduction to how this work, try typing 'help me!'(or just help) for some simple guidance");
     await Task.Delay(250);
-    while (currentRoom != null && !currentRoom.Cleared && !gameOver)
+    while (currentRoom != null && !currentRoom.Cleared)
     {
         Console.WriteLine("What do you want to do?");
         input = Console.ReadLine();
@@ -183,12 +183,12 @@ while (currentRoom?.Next != null && !gameOver)
                         gameOver = !currentRoom.Cleared;
                         if (gameOver) Console.WriteLine(currentRoom.Obstacle.FailMessage);
                         else Console.WriteLine(currentRoom.Obstacle.ClearedMessage);
-                        break;
+                        continue;
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message);
-                        break;
+                        continue;
                     }
                 case 2:
                     try
@@ -197,12 +197,12 @@ while (currentRoom?.Next != null && !gameOver)
                         gameOver = !currentRoom.Cleared;
                         if (gameOver) Console.WriteLine(currentRoom.Obstacle.FailMessage);
                         else Console.WriteLine(currentRoom.Obstacle.ClearedMessage);
-                        break;
+                        continue;
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message);
-                        break;
+                        continue;
                     }
                 case 3:
                     try
@@ -211,12 +211,12 @@ while (currentRoom?.Next != null && !gameOver)
                         gameOver = !currentRoom.Cleared;
                         if (gameOver) Console.WriteLine(currentRoom.Obstacle.FailMessage);
                         else Console.WriteLine(currentRoom.Obstacle.ClearedMessage);
-                        break;
+                        continue;
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message);
-                        break;
+                        continue;
                     }
                 case 4:
                     try
@@ -225,22 +225,24 @@ while (currentRoom?.Next != null && !gameOver)
                         gameOver = !currentRoom.Cleared;
                         if (gameOver) Console.WriteLine(currentRoom.Obstacle.FailMessage);
                         else Console.WriteLine(currentRoom.Obstacle.ClearedMessage);
-                        break;
+                        continue;
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message);
-                        break;
+                        continue;
                     }
                 case 5:
                     currentRoom.Examine(player);
-                    break;
+                    continue;
                 case 6:
                     Console.WriteLine(action.Help);
-                    break;
+                    continue;
+                default:
+                    Console.WriteLine("I couldn't quite understand what you wanted.\nTry again, or type help for some help!");
+                    continue;
             }
     }
-    if (gameOver) continue;
     if (currentRoom != null && currentRoom.Obstacle != null && !currentRoom.Obstacle.Treasure.Equipped)
     {
         Console.WriteLine("Do you want to take the item?");

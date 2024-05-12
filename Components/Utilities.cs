@@ -26,13 +26,13 @@ The parseAction method then tries to parse the string, and tries to set a valid 
 the actions are invalid if their value is 0, i.e. it couldn't parse any info from the string. */
 public class PlayerActions
 {
-    public Dictionary<string, int> Actions = new Dictionary<string, int> { { "move", 1 }, { "go", 1 }, { "run", 4 }, { "walk", 1 }, { "attack", 2 }, { "fight", 2 }, { "hit", 2 }, { "look", 5 }, { "examine", 5 }, { "spy", 5 }, { "scry", 5 }, { "talk", 3 }, { "yell", 3 }, { "whisper", 3 }, { "fool", 3 }, { "ruse", 3 }, { "dodge", 4 }, { "roll", 4 }, { "evade", 4 }, { "avoid", 4 }, { "trick", 3 }, { "help", 6 }, { "h", 6 }, { "hjelp", 6 } };
+    public Dictionary<string, int> Actions = new Dictionary<string, int> { { "move", 1 }, { "go", 1 }, { "run", 4 }, { "walk", 1 }, { "attack", 2 }, { "fight", 2 }, { "hit", 2 }, { "look", 5 }, { "examine", 5 }, { "spy", 5 }, { "scry", 5 }, { "talk", 3 }, { "yell", 3 }, { "whisper", 3 }, { "fool", 3 }, { "ruse", 3 }, { "dodge", 4 }, { "roll", 4 }, { "evade", 4 }, { "avoid", 4 }, { "trick", 3 }, { "help", 6 }, { "h", 6 }, { "hjelp", 6 }, { "lift", 1 }, { "jump", 4 } };
     public Dictionary<string, int> Targets = new Dictionary<string, int> { { "north", 1 }, { "backwards", 1 }, { "up", 1 }, { "south", 2 }, { "down", 2 }, { "forward", 2 }, { "on", 2 }, { "back", 1 }, { "onwards", 2 } };
     public Dictionary<string, int> Affirmative = new Dictionary<string, int> { { "yes", 1 }, { "y", 1 }, { "aye", 1 }, { "ye", 1 }, { "ja", 1 }, { "yeah", 1 }, { "no", 2 }, { "n", 2 }, { "nay", 2 }, { "nei", 2 }, { "nah", 2 }, { "sure", 1 } };
     public int Action { get; private set; }
     public int Target { get; private set; }
     public int Affirmation { get; set; }
-    public string Help = "Here are some actions you can do in this game. You can try moving around. when moving around you spesify a direction\nAs an example:\n\t\t'I want to move forward'\nThis action would move you to the next room if available.\nThe rooms will contain obstacles.\nSome obstacles can be attacked, moved, talked to, or dodged.\n It's up to you to find the correct action for each obstacle.\n\nWhen you first enter a room you can also try to examine the room for clues.\nA successfull examination will make the obstacle easier to clear.";
+    public string Help = "Here are some actions you can do in this game. You can try moving around. when moving around you spesify a direction\nAs an example:\n\t\t'I want to move forward'\nThis action would move you to the next room if the obstacle is cleared.\nThe rooms will contain obstacles.\nSome obstacles can be attacked, moved, talked to, or dodged.\n It's up to you to find the correct action for each obstacle.\n\nWhen you first enter a room you can also try to examine the room for clues.\nA successfull examination will make the obstacle easier to clear.";
     /// <summary>
     /// A function that takes in a string written by the user. And then tries to extract an Action, </br>
     /// and a target from said string.</br>
