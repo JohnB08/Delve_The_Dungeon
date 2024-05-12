@@ -165,7 +165,7 @@ while (currentRoom?.Next != null && !game.GameOver)
     await GameMessage.PrintMessage($"{currentRoom.Description}", 25);
     if (!currentRoom.Cleared) await GameMessage.PrintMessage($"{currentRoom?.Obstacle?.Description}", 25);
     await GameMessage.PrintMessage("For a quick introduction to how this work, try typing 'help me!'(or just help) for some simple guidance", 25);
-    while (currentRoom != null && !currentRoom.Cleared)
+    while (currentRoom != null && !currentRoom.Cleared && !game.GameOver)
     {
         await GameMessage.PrintMessage("What do you want to do?", 25);
         input = Console.ReadLine();
@@ -173,10 +173,10 @@ while (currentRoom?.Next != null && !game.GameOver)
         action.ParseAction(input);
         if (currentRoom.Obstacle != null)
         {
-            currentRoom.RunObstacleLogic(player, action, game);
+            game.GameOver = await currentRoom.RunObstacleLogic(player, action);
         }
-        if (game.GameOver) continue;
     }
+    if (game.GameOver) continue;
     if (currentRoom != null && currentRoom.Obstacle != null && !currentRoom.Obstacle.Treasure.Equipped)
     {
         await GameMessage.PrintMessage("Do you want to take the item?", 25);

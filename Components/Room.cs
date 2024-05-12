@@ -176,7 +176,7 @@ public class Room
     /// Checks if the room can be examined. Then rolls the examine skillcheck to see if you can make the obstacle a little easier.
     /// </summary>
     /// <param name="player"></param>
-    public async void Examine(Player player)
+    public async Task Examine(Player player)
     {
         if (Examined)
         {
@@ -208,76 +208,72 @@ public class Room
     /// <param name="player">The player is the current player object.</param>
     /// <param name="Actions">the Actions is the current player actions parsed.</param>
     /// <param name="gameOver">The main bool game over. called as a reference so the method knows what to manipulate.</param>
-    public async void RunObstacleLogic(Player player, PlayerActions Actions, GameState game)
+    public async Task<bool> RunObstacleLogic(Player player, PlayerActions Actions)
     {
-        if (Obstacle == null) return;
+        if (Obstacle == null) return false;
         switch (Actions.Action)
         {
             case 1:
                 try
                 {
                     Cleared = Obstacle.MoveObstacle(player);
-                    game.GameOver = !Cleared;
-                    if (game.GameOver) await GameMessage.PrintMessage(Obstacle.FailMessage, 25);
+                    if (!Cleared) await GameMessage.PrintMessage(Obstacle.FailMessage, 25);
                     else await GameMessage.PrintMessage(Obstacle.ClearedMessage, 25);
-                    break;
+                    return !Cleared;
                 }
                 catch (Exception ex)
                 {
                     await GameMessage.PrintMessage(ex.Message, 25);
-                    break;
+                    return false;
                 }
             case 2:
                 try
                 {
                     Cleared = Obstacle.AttackObstacle(player);
-                    game.GameOver = !Cleared;
-                    if (game.GameOver) await GameMessage.PrintMessage(Obstacle.FailMessage, 25);
+                    if (!Cleared) await GameMessage.PrintMessage(Obstacle.FailMessage, 25);
                     else await GameMessage.PrintMessage(Obstacle.ClearedMessage, 25);
-                    break;
+                    return !Cleared;
                 }
                 catch (Exception ex)
                 {
                     await GameMessage.PrintMessage(ex.Message, 25);
-                    break;
+                    return false;
                 }
             case 3:
                 try
                 {
                     Cleared = Obstacle.TalkToObstacle(player);
-                    game.GameOver = !Cleared;
-                    if (game.GameOver) await GameMessage.PrintMessage(Obstacle.FailMessage, 25);
+                    if (!Cleared) await GameMessage.PrintMessage(Obstacle.FailMessage, 25);
                     else await GameMessage.PrintMessage(Obstacle.ClearedMessage, 25);
-                    break;
+                    return !Cleared;
                 }
                 catch (Exception ex)
                 {
                     await GameMessage.PrintMessage(ex.Message, 25);
-                    break;
+                    return false;
                 }
             case 4:
                 try
                 {
                     Cleared = Obstacle.DodgeObstacle(player);
-                    game.GameOver = !Cleared;
-                    if (game.GameOver) await GameMessage.PrintMessage(Obstacle.FailMessage, 25);
+                    if (!Cleared) await GameMessage.PrintMessage(Obstacle.FailMessage, 25);
                     else await GameMessage.PrintMessage(Obstacle.ClearedMessage, 25);
-                    break;
+                    return !Cleared;
                 }
                 catch (Exception ex)
                 {
                     await GameMessage.PrintMessage(ex.Message, 25);
-                    break;
+                    return false;
                 }
             case 5:
-                Examine(player);
-                break;
+                await Examine(player);
+                return false;
             case 6:
                 await GameMessage.PrintMessage(Actions.Help, 25);
-                break;
+                return false;
             default:
                 await GameMessage.PrintMessage("I couldn't quite understand what you wanted.\nTry again, or type help for some help!", 25);
-                break;
+                return false;
         }
     }
 }
