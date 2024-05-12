@@ -2,9 +2,9 @@ namespace Components.Player;
 public class Player
 {
     public string? Name { get; set; }
-    public int Strength { get; set; }
-    public int Agility { get; set; }
-    public int Wit { get; set; }
+    public int Strength { get; set; } = 0;
+    public int Agility { get; set; } = 0;
+    public int Wit { get; set; } = 0;
     public int Points { get; private set; } = 3;
 
     /// <summary>
