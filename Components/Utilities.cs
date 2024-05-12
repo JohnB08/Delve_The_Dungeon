@@ -52,3 +52,21 @@ public class PlayerActions
     }
 
 }
+public class GameMessage
+{
+    public static async Task PrintMessage(string message, int delay)
+    {
+        foreach (char letter in message)
+        {
+            if (letter == '\n') Console.WriteLine();
+            else if (letter == '\t') Console.Write("   ");
+            else Console.Write(letter);
+            await Task.Delay(delay);
+        }
+        Console.WriteLine();
+    }
+}
+public class GameState
+{
+    public bool GameOver { get; set; } = false;
+}

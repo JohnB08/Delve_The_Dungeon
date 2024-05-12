@@ -176,11 +176,11 @@ public class Room
     /// Checks if the room can be examined. Then rolls the examine skillcheck to see if you can make the obstacle a little easier.
     /// </summary>
     /// <param name="player"></param>
-    public void Examine(Player player)
+    public async void Examine(Player player)
     {
         if (Examined)
         {
-            Console.WriteLine("You cannot learn anything else from this room.");
+            await GameMessage.PrintMessage("You cannot learn anything else from this room.", 25);
             return;
         }
         bool SuccessfullExamine = SkillCheck.RollSkillCheck(player.Wit, 4);
@@ -189,7 +189,7 @@ public class Room
             if (Obstacle != null)
             {
                 Obstacle.Difficulty--;
-                Console.WriteLine(Obstacle.ExaminedDescription);
+                await GameMessage.PrintMessage(Obstacle.ExaminedDescription, 25);
             }
             Examined = true;
 
@@ -197,7 +197,7 @@ public class Room
         }
         else
         {
-            Console.WriteLine("You fail to notice anything out of place.");
+            await GameMessage.PrintMessage("You fail to notice anything out of place.", 25);
             Examined = true;
             return;
         }
@@ -208,7 +208,7 @@ public class Room
     /// <param name="player">The player is the current player object.</param>
     /// <param name="Actions">the Actions is the current player actions parsed.</param>
     /// <param name="gameOver">The main bool game over. called as a reference so the method knows what to manipulate.</param>
-    public void RunObstacleLogic(Player player, PlayerActions Actions, ref bool gameOver)
+    public async void RunObstacleLogic(Player player, PlayerActions Actions, GameState game)
     {
         if (Obstacle == null) return;
         switch (Actions.Action)
@@ -217,66 +217,66 @@ public class Room
                 try
                 {
                     Cleared = Obstacle.MoveObstacle(player);
-                    gameOver = !Cleared;
-                    if (gameOver) Console.WriteLine(Obstacle.FailMessage);
-                    else Console.WriteLine(Obstacle.ClearedMessage);
+                    game.GameOver = !Cleared;
+                    if (game.GameOver) await GameMessage.PrintMessage(Obstacle.FailMessage, 25);
+                    else await GameMessage.PrintMessage(Obstacle.ClearedMessage, 25);
                     break;
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    await GameMessage.PrintMessage(ex.Message, 25);
                     break;
                 }
             case 2:
                 try
                 {
                     Cleared = Obstacle.AttackObstacle(player);
-                    gameOver = !Cleared;
-                    if (gameOver) Console.WriteLine(Obstacle.FailMessage);
-                    else Console.WriteLine(Obstacle.ClearedMessage);
+                    game.GameOver = !Cleared;
+                    if (game.GameOver) await GameMessage.PrintMessage(Obstacle.FailMessage, 25);
+                    else await GameMessage.PrintMessage(Obstacle.ClearedMessage, 25);
                     break;
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    await GameMessage.PrintMessage(ex.Message, 25);
                     break;
                 }
             case 3:
                 try
                 {
                     Cleared = Obstacle.TalkToObstacle(player);
-                    gameOver = !Cleared;
-                    if (gameOver) Console.WriteLine(Obstacle.FailMessage);
-                    else Console.WriteLine(Obstacle.ClearedMessage);
+                    game.GameOver = !Cleared;
+                    if (game.GameOver) await GameMessage.PrintMessage(Obstacle.FailMessage, 25);
+                    else await GameMessage.PrintMessage(Obstacle.ClearedMessage, 25);
                     break;
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    await GameMessage.PrintMessage(ex.Message, 25);
                     break;
                 }
             case 4:
                 try
                 {
                     Cleared = Obstacle.DodgeObstacle(player);
-                    gameOver = !Cleared;
-                    if (gameOver) Console.WriteLine(Obstacle.FailMessage);
-                    else Console.WriteLine(Obstacle.ClearedMessage);
+                    game.GameOver = !Cleared;
+                    if (game.GameOver) await GameMessage.PrintMessage(Obstacle.FailMessage, 25);
+                    else await GameMessage.PrintMessage(Obstacle.ClearedMessage, 25);
                     break;
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    await GameMessage.PrintMessage(ex.Message, 25);
                     break;
                 }
             case 5:
                 Examine(player);
                 break;
             case 6:
-                Console.WriteLine(Actions.Help);
+                await GameMessage.PrintMessage(Actions.Help, 25);
                 break;
             default:
-                Console.WriteLine("I couldn't quite understand what you wanted.\nTry again, or type help for some help!");
+                await GameMessage.PrintMessage("I couldn't quite understand what you wanted.\nTry again, or type help for some help!", 25);
                 break;
         }
     }

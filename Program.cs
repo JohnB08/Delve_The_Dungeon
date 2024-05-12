@@ -6,28 +6,30 @@ PlayerActions action = new();
 
 DungeonLayout dungeon = new();
 
+GameState game = new();
+
 Player player = new();
 
-Console.WriteLine("Welcome to Delve the dungeon.");
-Console.WriteLine("Before we begin this adventure, please tell me your name:");
+await GameMessage.PrintMessage("Welcome to Delve the dungeon.", 25);
+await GameMessage.PrintMessage("Before we begin this adventure, please tell me your name:", 25);
 string? input = Console.ReadLine()?.Trim();
 while (String.IsNullOrEmpty(input))
 {
-    Console.WriteLine("\nYou can tell me your name. Any name really. It's okay, you can lie to me.");
+    await GameMessage.PrintMessage("\nYou can tell me your name. Any name really. It's okay, you can lie to me.", 25);
     input = Console.ReadLine();
 }
 player.Name = input;
-Console.WriteLine("Good. Now let's make you better.\n\n");
+await GameMessage.PrintMessage("Good. Now let's make you better.\n\n", 25);
 await Task.Delay(250);
-Console.WriteLine("to improve yourself you can set points into the following attributes: \n\n\tStrength\t\tAgility\t\tWit\n\nStrenght increases your ability to do heavy liftings, punch, kick and move objects.\n\nAgility is your ability to move and dogde at speed.\n\nWit is your ability to do quick thinking, either in dialogue or when examining your surroundings.");
+await GameMessage.PrintMessage("to improve yourself you can set points into the following attributes: \n\n\tStrength\t\tAgility\t\tWit\n\nStrength increases your ability to do heavy liftings, punch, kick and move objects.\n\nAgility is your ability to move and dogde at speed.\n\nWit is your ability to do quick thinking, either in dialogue or when examining your surroundings.", 25);
 
 while (player.Points > 0)
 {
-    Console.WriteLine($"You have {player.Points} points to distribute to make yourself a little better at something. \nPlease type which attribute to increase:");
+    await GameMessage.PrintMessage($"You have {player.Points} points to distribute to make yourself a little better at something. \nPlease type which attribute to increase:", 25);
     string? attr = Console.ReadLine()?.ToLower().Trim();
     if (attr == null)
     {
-        Console.WriteLine("Please write the attribute you would like to improve.");
+        await GameMessage.PrintMessage("Please write the attribute you would like to improve.", 25);
         await Task.Delay(250);
         continue;
     }
@@ -38,7 +40,7 @@ while (player.Points > 0)
     }
     catch (Exception ex)
     {
-        Console.WriteLine(ex.Message);
+        await GameMessage.PrintMessage(ex.Message, 25);
         await Task.Delay(250);
         continue;
     }
@@ -153,62 +155,58 @@ dungeon.AddRoomEnd("This is the end of your journey.");
 
 
 Room? currentRoom = dungeon.Start;
-bool gameOver = false;
 if (currentRoom == null)
 {
     Console.WriteLine("Something went very wrong building the dungeon.");
     return;
 }
-while (currentRoom?.Next != null && !gameOver)
+while (currentRoom?.Next != null && !game.GameOver)
 {
-    Console.WriteLine($"{currentRoom.Description}");
-    await Task.Delay(250);
-    if (!currentRoom.Cleared) Console.WriteLine($"{currentRoom?.Obstacle?.Description}");
-    await Task.Delay(250);
-    Console.WriteLine("For a quick introduction to how this work, try typing 'help me!'(or just help) for some simple guidance");
-    await Task.Delay(250);
+    await GameMessage.PrintMessage($"{currentRoom.Description}", 25);
+    if (!currentRoom.Cleared) await GameMessage.PrintMessage($"{currentRoom?.Obstacle?.Description}", 25);
+    await GameMessage.PrintMessage("For a quick introduction to how this work, try typing 'help me!'(or just help) for some simple guidance", 25);
     while (currentRoom != null && !currentRoom.Cleared)
     {
-        Console.WriteLine("What do you want to do?");
+        await GameMessage.PrintMessage("What do you want to do?", 25);
         input = Console.ReadLine();
         if (input == null || input.Length <= 0) continue;
         action.ParseAction(input);
         if (currentRoom.Obstacle != null)
         {
-            currentRoom.RunObstacleLogic(player, action, ref gameOver);
+            currentRoom.RunObstacleLogic(player, action, game);
         }
-        if (gameOver) continue;
+        if (game.GameOver) continue;
     }
     if (currentRoom != null && currentRoom.Obstacle != null && !currentRoom.Obstacle.Treasure.Equipped)
     {
-        Console.WriteLine("Do you want to take the item?");
+        await GameMessage.PrintMessage("Do you want to take the item?", 25);
         input = Console.ReadLine()?.Trim();
         if (String.IsNullOrEmpty(input))
         {
-            Console.WriteLine("Just a simple yes or no will do.");
+            await GameMessage.PrintMessage("Just a simple yes or no will do.", 25);
             continue;
         }
         action.ParseAction(input);
         if (action.Affirmation != 1)
         {
-            Console.WriteLine("Very well. No item for you.");
+            await GameMessage.PrintMessage("Very well. No item for you.", 25);
         }
         else
         {
             currentRoom.Obstacle.Treasure.EquipReward(player);
         }
     }
-    Console.WriteLine("You can move on now, if you wish.");
+    await GameMessage.PrintMessage("You can move on now, if you wish.", 25);
     input = Console.ReadLine()?.Trim();
     if (String.IsNullOrEmpty(input))
     {
-        Console.WriteLine("Just tell me if you want to move forward down into the dungeon.");
+        await GameMessage.PrintMessage("Just tell me if you want to move forward down into the dungeon.", 25);
         continue;
     }
     action.ParseAction(input);
     if (action.Action != 1)
     {
-        Console.WriteLine("Now is not the time for stuff like this.");
+        await GameMessage.PrintMessage("Now is not the time for stuff like this.", 25);
         continue;
     }
     else
@@ -221,7 +219,7 @@ while (currentRoom?.Next != null && !gameOver)
             }
             else
             {
-                Console.WriteLine("Cannot go there.");
+                await GameMessage.PrintMessage("Cannot go there.", 25);
                 continue;
             }
         }
@@ -233,17 +231,17 @@ while (currentRoom?.Next != null && !gameOver)
             }
             else
             {
-                Console.WriteLine("Cannot go there.");
+                await GameMessage.PrintMessage("Cannot go there.", 25);
                 continue;
             }
         }
         else
         {
-            Console.WriteLine("Couldn't parse where you wanted to go. Please try again");
+            await GameMessage.PrintMessage("Couldn't parse where you wanted to go. Please try again", 25);
             continue;
         }
     }
 }
-if (!gameOver) Console.WriteLine(currentRoom?.Description);
-Console.WriteLine("Thanks for playing, press any button to exit the game.");
+if (!game.GameOver) Console.WriteLine(currentRoom?.Description);
+await GameMessage.PrintMessage("Thanks for playing, press any button to exit the game.", 25);
 Console.ReadLine();
