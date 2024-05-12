@@ -1,14 +1,13 @@
 ﻿using Components.Utilities;
 using Components.Room;
 using Components.Player;
-using System.Collections;
-
 
 PlayerActions action = new();
 
 DungeonLayout dungeon = new();
 
 Player player = new();
+
 dungeon.AddRoomEnd("You stand in the kitchen.\nBehind the butcher's table there seems to indeed be an old, steep, stairwell going down into the darkness below.", new Obstacle(
         name: "The Sharp Mess",
         desc: "Dangerous tools and rusty instruments lie strewn all over this kitchen, one wrong move and it could go very bad.\nSomething is tied to the stairs, it flutters in a light breeze.",
@@ -118,9 +117,10 @@ dungeon.AddRoomStart("You stand in a tarvern, slightly enebriated. You heard rum
         cleared: "You outwitted the old drunk, and he stumbles past you to find solace in even more brown liquid.\nHe drops his blade."
     ));
 dungeon.AddRoomEnd("This is the end of your journey.");
+
 Console.WriteLine("Welcome to Delve the dungeon.");
 Console.WriteLine("Before we begin this adventure, please tell me your name:");
-string input = Console.ReadLine();
+string? input = Console.ReadLine();
 while (input != null && input.Length <= 0)
 {
     Console.WriteLine("\nYou can tell me your name. Any name really. It's okay, you can lie to me.");
@@ -162,7 +162,7 @@ if (currentRoom == null)
     Console.WriteLine("Something went very wrong building the dungeon.");
     return;
 }
-while (currentRoom.Next != null && !gameOver)
+while (currentRoom?.Next != null && !gameOver)
 {
     Console.WriteLine($"{currentRoom.Description}");
     await Task.Delay(250);
@@ -279,7 +279,7 @@ while (currentRoom.Next != null && !gameOver)
     {
         if (action.Target == 1)
         {
-            if (currentRoom.Prev != null)
+            if (currentRoom?.Prev != null)
             {
                 currentRoom = currentRoom.Prev;
             }
@@ -291,7 +291,7 @@ while (currentRoom.Next != null && !gameOver)
         }
         else if (action.Target == 2)
         {
-            if (currentRoom.Next != null)
+            if (currentRoom?.Next != null)
             {
                 currentRoom = currentRoom.Next;
             }

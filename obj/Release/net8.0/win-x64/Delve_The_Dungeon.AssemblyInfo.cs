@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Delve_The_Dungeon")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+23a88c596725def614737f599c1efa35ad70f26c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+13337a85082d82fe7c8802e90d172e085464132b")]
 [assembly: System.Reflection.AssemblyProductAttribute("Delve_The_Dungeon")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Delve_The_Dungeon")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
