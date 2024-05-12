@@ -129,10 +129,11 @@ while (input != null && input.Length <= 0)
 if (input != null) player.Name = input;
 Console.WriteLine("Good. Now let's make you better.\n\n");
 await Task.Delay(250);
+Console.WriteLine("to improve yourself you can set points into the following attributes: \n\n\tStrength\t\tAgility\t\tWit\n\nStrenght increases your ability to do heavy liftings, punch, kick and move objects.\n\nAgility is your ability to move and dogde at speed.\n\nWit is your ability to do quick thinking, either in dialogue or when examining your surroundings.");
 
 while (player.Points > 0)
 {
-    Console.WriteLine($"You have {player.Points} points to distribute to make yourself a little better at something. \n The attributes you can increase are: \n\n\tStrength\t\tAgility\t\tWit\n\nPlease choose one to increase:");
+    Console.WriteLine($"You have {player.Points} points to distribute to make yourself a little better at something. \nPlease type which attribute to increase:");
     string? attr = Console.ReadLine()?.ToLower().Trim();
     if (attr == null)
     {
@@ -252,7 +253,7 @@ while (currentRoom.Next != null && !gameOver)
             continue;
         }
         action.ParseAction(input);
-        if (action.Action != 7)
+        if (action.Affirmation != 1)
         {
             Console.WriteLine("Very well. No item for you.");
         }
