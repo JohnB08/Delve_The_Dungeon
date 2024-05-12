@@ -10,6 +10,13 @@ public class Treasure
     public int Reward { get; set; }
     public string EquipDesc { get; set; }
     public bool Equipped { get; set; } = false;
+    /// <summary>
+    /// The treasure a player can obtain when clearing an obstacle.
+    /// </summary>
+    /// <param name="desc">A description of the treasure.</param>
+    /// <param name="attr">What attribute does it affect. 1 is strength, 2 is agility, 3 is wit.</param>
+    /// <param name="rew">how does it affect the attribute? Integer increasing (or decreasing) the set attribute.</param>
+    /// <param name="eqdesc">A message displayed when the item is equipped.</param>
     public Treasure(string desc, int attr, int rew, string eqdesc)
     {
         Description = desc;
@@ -17,6 +24,10 @@ public class Treasure
         Reward = rew;
         EquipDesc = eqdesc;
     }
+    /// <summary>
+    /// A function that equips the item to the player, increasing (or decreasing) the affected attribute.
+    /// </summary>
+    /// <param name="player"></param>
     public void EquipReward(Player player)
     {
         switch (Attribute)
@@ -49,6 +60,21 @@ public class Obstacle
     public bool Dodgeable { get; set; }
     public string ClearedMessage { get; set; }
     public string FailMessage { get; set; }
+    /// <summary>
+    /// The constructor for the Obstacle object.
+    /// </summary>
+    /// <param name="name">The name of the obstacle</param>
+    /// <param name="desc">A description of the obstacle, presented to the player</param>
+    /// <param name="diff">Int, how difficult is it (keep the number lower than 5 for a "fair" experience.</param>
+    /// <param name="attr">What attribute should the player use to overcome it, 1 is strength, 2 is agility, 3 is wit.</param>
+    /// <param name="exdesc">When examined, what do the player spot, describe how examining made the obstacle easier to overcome.</param>
+    /// <param name="treasure">This is the treasure object associated with the Obstacle</param>
+    /// <param name="cleared">The message presented to the player if the obstacle is cleared.</param>
+    /// <param name="fail">The message presented to the player if the obstacle is failed.</param>
+    /// <param name="attk">Can it be attacked?</param>
+    /// <param name="talk">Can it be talked to?</param>
+    /// <param name="dodge">Can the player dodge it?</param>
+    /// <param name="mov">Can the player move it?</param>
     public Obstacle(string name, string desc, int diff, int attr, string exdesc, Treasure treasure, string cleared, string fail, bool attk = false, bool talk = false, bool dodge = false, bool mov = false)
     {
         Name = name;
