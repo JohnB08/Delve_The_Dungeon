@@ -110,23 +110,23 @@ dungeon.AddRoomStart("You stand in a tarvern, slightly enebriated. You heard rum
         dodge: true,
         cleared: "You outwitted the old drunk, and he stumbles past you to find solace in even more brown liquid.\nHe drops his blade."
     ));
-dungeon.AddRoomEnd("This is the end of your journey.", null);
+dungeon.AddRoomEnd("This is the end of your journey.");
 Console.WriteLine("Welcome to Delve the dungeon.");
 Console.WriteLine("Before we begin this adventure, please tell me your name:");
 string? nameInput = Console.ReadLine();
-while (nameInput.Length <= 0)
+while (nameInput != null && nameInput.Length <= 0)
 {
     Console.WriteLine("\nYou can tell me your name. Any name really. It's okay, you can lie to me.");
     nameInput = Console.ReadLine();
 }
-player.Name = nameInput;
+if (nameInput != null) player.Name = nameInput;
 Console.WriteLine("Good. Now let's make you better.\n\n");
 await Task.Delay(250);
 
 while (player.Points > 0)
 {
     Console.WriteLine($"You have {player.Points} points to distribute to make yourself a little better at something. \n The attributes you can increase are: \n\n\tStrength\t\tAgility\t\tWit\n\nPlease choose one to increase:");
-    string attr = Console.ReadLine().ToLower().Trim();
+    string? attr = Console.ReadLine()?.ToLower().Trim();
     if (attr == null)
     {
         Console.WriteLine("Please write the attribute you would like to improve.");
@@ -146,34 +146,35 @@ while (player.Points > 0)
     }
 }
 
-Room currentRoom = dungeon.Start;
+
+Room? currentRoom = dungeon.Start;
 bool gameOver = false;
-while (currentRoom.Next != null && !gameOver)
+while (currentRoom?.Next != null && !gameOver)
 {
     Console.WriteLine($"{currentRoom.Description}");
     await Task.Delay(250);
-    if (!currentRoom.Cleared) Console.WriteLine($"{currentRoom.Obstacle.Description}");
+    if (!currentRoom.Cleared) Console.WriteLine($"{currentRoom?.Obstacle?.Description}");
     await Task.Delay(250);
     Console.WriteLine("For a quick introduction to how this work, try typing 'help me!'(or just help) for some simple guidance");
     await Task.Delay(250);
     Console.WriteLine("What do you want to do?");
-    string input = Console.ReadLine();
+    string? input = Console.ReadLine();
     if (input == null) continue;
     else
     {
         action.ParseAction(input);
-        if (action.Action == null) continue;
-        if (!currentRoom.Cleared)
+        if (action.Action == 0) continue;
+        if (currentRoom != null && !currentRoom.Cleared)
         {
-            if (action.Action == "examine")
+            if (action.Action == 5)
             {
                 currentRoom.Examine(player);
                 await Task.Delay(250);
                 continue;
             }
-            if (action.Action == "help")
+            if (action.Action == 6)
             {
-                Console.WriteLine(action.Help());
+                Console.WriteLine(action.Help);
                 await Task.Delay(250);
                 continue;
             }
@@ -184,55 +185,59 @@ while (currentRoom.Next != null && !gameOver)
                 await Task.Delay(250);
                 continue;
             }
-            bool didObstacle = currentRoom.Obstacle.OvercomeObstacle(player);
-            if (!didObstacle)
+            if (currentRoom.Obstacle != null)
             {
-                Console.WriteLine(currentRoom.Obstacle.FailMessage);
-                await Task.Delay(250);
-                gameOver = true;
-            }
-            else
-            {
-                Console.WriteLine(currentRoom.Obstacle.ClearedMessage);
-                await Task.Delay(250);
-                Console.WriteLine(currentRoom.Obstacle.Treasure.Description);
-                await Task.Delay(250);
-                Console.WriteLine("Do you want to equip the treasure?");
-                await Task.Delay(250);
-                input = Console.ReadLine();
-                if (input != null)
+                bool didObstacle = currentRoom.Obstacle.OvercomeObstacle(player);
+                if (!didObstacle)
                 {
-                    action.ParseAction(input);
-                    if (action.Action != "y")
-                    {
-                        Console.WriteLine("Very well!");
-                        await Task.Delay(250);
-                        currentRoom.Cleared = true;
-                        continue;
-                    }
-                    else
-                    {
-                        currentRoom.Obstacle.Treasure.EquipReward(player);
-                        currentRoom.Cleared = true;
-                        continue;
-                    }
+                    Console.WriteLine(currentRoom.Obstacle.FailMessage);
+                    await Task.Delay(250);
+                    gameOver = true;
                 }
                 else
                 {
-                    Console.WriteLine("Indecisive, huh? We'll discard this item for now.");
-                    currentRoom.Cleared = true;
+                    Console.WriteLine(currentRoom.Obstacle.ClearedMessage);
                     await Task.Delay(250);
-                    continue;
+                    Console.WriteLine(currentRoom.Obstacle.Treasure.Description);
+                    await Task.Delay(250);
+                    Console.WriteLine("Do you want to equip the treasure?");
+                    await Task.Delay(250);
+                    input = Console.ReadLine();
+                    if (input != null)
+                    {
+                        action.ParseAction(input);
+                        if (action.Action != 7)
+                        {
+                            Console.WriteLine("Very well!");
+                            await Task.Delay(250);
+                            currentRoom.Cleared = true;
+                            continue;
+                        }
+                        else
+                        {
+                            currentRoom.Obstacle.Treasure.EquipReward(player);
+                            currentRoom.Cleared = true;
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Indecisive, huh? We'll discard this item for now.");
+                        currentRoom.Cleared = true;
+                        await Task.Delay(250);
+                        continue;
+                    }
                 }
             }
+
         }
         else
         {
-            if (action.Action == "move")
+            if (action.Action == 1)
             {
-                if (action.Target == "up")
+                if (action.Target == 1)
                 {
-                    if (currentRoom.Prev != null)
+                    if (currentRoom?.Prev != null)
                     {
                         currentRoom = currentRoom.Prev;
                         await Task.Delay(250);
@@ -245,9 +250,9 @@ while (currentRoom.Next != null && !gameOver)
                         continue;
                     }
                 }
-                else if (action.Target == "down")
+                else if (action.Target == 2)
                 {
-                    if (currentRoom.Next != null)
+                    if (currentRoom?.Next != null)
                     {
                         currentRoom = currentRoom.Next;
                         await Task.Delay(250);
@@ -277,6 +282,6 @@ while (currentRoom.Next != null && !gameOver)
     }
 }
 currentRoom = dungeon.End;
-Console.WriteLine(currentRoom.Description);
+Console.WriteLine(currentRoom?.Description);
 Console.WriteLine("Thanks for playing, press any button to exit the game.");
 Console.ReadLine();

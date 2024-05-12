@@ -83,12 +83,12 @@ public class Obstacle
 public class Room
 {
     public string Description { get; set; }
-    public Room Next { get; set; }
-    public Room Prev { get; set; }
-    public Obstacle Obstacle { get; set; }
+    public Room? Next { get; set; }
+    public Room? Prev { get; set; }
+    public Obstacle? Obstacle { get; set; }
     public bool Cleared { get; set; }
     public bool Examined { get; set; } = false;
-    public Room(string description, Obstacle obstacle, bool cleared = false, bool examined = false)
+    public Room(string description, Obstacle? obstacle = null, bool cleared = false, bool examined = false)
     {
         Description = description;
         Obstacle = obstacle;
@@ -98,9 +98,13 @@ public class Room
         bool SuccessfullExamine = SkillCheck.RollSkillCheck(player.Wit, 4);
         if (SuccessfullExamine)
         {
-            Obstacle.Difficulty--;
+            if (Obstacle != null)
+            {
+                Obstacle.Difficulty--;
+                Console.WriteLine(Obstacle.ExaminedDescription);
+            }
             Examined = true;
-            Console.WriteLine(Obstacle.ExaminedDescription);
+
             return;
         }
         else
@@ -110,23 +114,26 @@ public class Room
             return;
         }
     }
-    public bool CanClearObstacle(string action)
+    public bool CanClearObstacle(int action)
     {
         bool obstacleClearable = false;
-        switch (action)
+        if (Obstacle != null)
         {
-            case "move":
-                obstacleClearable = Obstacle.Moveable;
-                break;
-            case "attack":
-                obstacleClearable = Obstacle.Attackable;
-                break;
-            case "talk":
-                obstacleClearable = Obstacle.Talkable;
-                break;
-            case "dogde":
-                obstacleClearable = Obstacle.Dodgeable;
-                break;
+            switch (action)
+            {
+                case 1:
+                    obstacleClearable = Obstacle.Moveable;
+                    break;
+                case 2:
+                    obstacleClearable = Obstacle.Attackable;
+                    break;
+                case 3:
+                    obstacleClearable = Obstacle.Talkable;
+                    break;
+                case 4:
+                    obstacleClearable = Obstacle.Dodgeable;
+                    break;
+            }
         }
         return obstacleClearable;
     }
@@ -134,10 +141,10 @@ public class Room
 
 public class DungeonLayout
 {
-    public Room Start { get; private set; }
-    public Room End { get; private set; }
+    public Room? Start { get; private set; }
+    public Room? End { get; private set; }
     public int DungeonLength { get; private set; }
-    public void AddRoomStart(string desc, Obstacle obs)
+    public void AddRoomStart(string desc, Obstacle? obs = null)
     {
         Room newRoom = new(desc, obs);
         newRoom.Next = Start;
@@ -149,7 +156,7 @@ public class DungeonLayout
         End ??= newRoom;
         DungeonLength++;
     }
-    public void AddRoomEnd(string desc, Obstacle obs)
+    public void AddRoomEnd(string desc, Obstacle? obs = null)
     {
         if (Start == null)
         {
@@ -157,7 +164,7 @@ public class DungeonLayout
             return;
         }
         Room newRoom = new(desc, obs);
-        End.Next = newRoom;
+        if (End != null) End.Next = newRoom;
         newRoom.Prev = End;
         End = newRoom;
         DungeonLength++;

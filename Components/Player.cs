@@ -1,7 +1,7 @@
 namespace Components.Player;
 public class Player
 {
-    public string Name { get; set; }
+    public string? Name { get; set; }
     public int Strength { get; set; }
     public int Agility { get; set; }
     public int Wit { get; set; }
