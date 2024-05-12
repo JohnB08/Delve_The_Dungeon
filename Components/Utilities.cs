@@ -1,6 +1,14 @@
 namespace Components.Utilities;
+
+/* This is the class that handles the skillchecks. */
 public class SkillCheck
 {
+    /// <summary>
+    /// This method takes two attributes, it also includes a six-sided dice. </br>It rolls the dice then adds the attribute and checks if the sum is larger than the target.</br>It returns true or false
+    /// </summary>
+    /// <param name="attribute"></param>
+    /// <param name="target"></param>
+    /// <returns></returns>
     public static bool RollSkillCheck(int attribute, int target)
     {
         Random dice = new();

@@ -64,7 +64,12 @@ public class Obstacle
         ClearedMessage = cleared;
         FailMessage = fail;
     }
-
+    /// <summary>
+    /// Denne funksjonen tar in et player object, og ser på int Attribute på obstacle den er tilknyttet. 
+    /// Den tar så en skillskjekk mellom Player og difficulty til objectet.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
     public bool OvercomeObstacle(Player player)
     {
         int playerAttribute = 0;
@@ -82,6 +87,12 @@ public class Obstacle
         }
         return SkillCheck.RollSkillCheck(playerAttribute, Difficulty);
     }
+    /// <summary>
+    /// Function that tries to attack the obstacle using a player object. Throws an exception if the obstacle is non-attackable.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
     public bool AttackObstacle(Player player)
     {
         if (Attackable)
@@ -93,6 +104,12 @@ public class Obstacle
             throw new InvalidOperationException($"You cannot attack {Name}");
         }
     }
+    /// <summary>
+    /// Function that tries to talk to the obstacle using the player object, throws exception if peace was never an option.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
     public bool TalkToObstacle(Player player)
     {
         if (Talkable)
@@ -104,6 +121,12 @@ public class Obstacle
             throw new InvalidOperationException($"You cannot talk to {Name}");
         }
     }
+    /// <summary>
+    /// Function that tries to dodge the obstacle, throws exception if dodging is not possible or needed.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
     public bool DodgeObstacle(Player player)
     {
         if (Dodgeable)
@@ -115,6 +138,12 @@ public class Obstacle
             throw new InvalidOperationException($"Dodging {Name} didn't accomplish anything.");
         }
     }
+    /// <summary>
+    /// Function that tries to move the obstacle, throws an exception if the object is immoveable.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
     public bool MoveObstacle(Player player)
     {
         if (Moveable)
@@ -142,8 +171,17 @@ public class Room
         Description = description;
         Obstacle = obstacle;
     }
+    /// <summary>
+    /// Checks if the room can be examined. Then rolls the examine skillcheck to see if you can make the obstacle a little easier.
+    /// </summary>
+    /// <param name="player"></param>
     public void Examine(Player player)
     {
+        if (Examined)
+        {
+            Console.WriteLine("You cannot learn anything else from this room.");
+            return;
+        }
         bool SuccessfullExamine = SkillCheck.RollSkillCheck(player.Wit, 4);
         if (SuccessfullExamine)
         {
@@ -164,12 +202,17 @@ public class Room
         }
     }
 }
-
+/* The dungeon layout is a doubly linked list. Where each room referes to the previous and the next room. the Start room is accessible outside. */
 public class DungeonLayout
 {
     public Room? Start { get; private set; }
     public Room? End { get; private set; }
     public int DungeonLength { get; private set; }
+    /// <summary>
+    /// Adds a room to the start of a dungeon (simmilar to Array.Shift()). 
+    /// </summary>
+    /// <param name="desc"></param>
+    /// <param name="obs"></param>
     public void AddRoomStart(string desc, Obstacle? obs = null)
     {
         Room newRoom = new(desc, obs);
@@ -182,6 +225,12 @@ public class DungeonLayout
         End ??= newRoom;
         DungeonLength++;
     }
+
+    /// <summary>
+    /// Adds a room to the end of the dungeon (simmilar to Array.Push()).
+    /// </summary>
+    /// <param name="desc"></param>
+    /// <param name="obs"></param>
     public void AddRoomEnd(string desc, Obstacle? obs = null)
     {
         if (Start == null)
