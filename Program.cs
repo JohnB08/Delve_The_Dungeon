@@ -10,8 +10,8 @@ Player player = new();
 
 Console.WriteLine("Welcome to Delve the dungeon.");
 Console.WriteLine("Before we begin this adventure, please tell me your name:");
-string? input = Console.ReadLine();
-while (input != null && input.Length <= 0)
+string? input = Console.ReadLine()?.Trim();
+while (String.IsNullOrEmpty(input))
 {
     Console.WriteLine("\nYou can tell me your name. Any name really. It's okay, you can lie to me.");
     input = Console.ReadLine();
@@ -174,80 +174,16 @@ while (currentRoom?.Next != null && !gameOver)
         if (input == null || input.Length <= 0) continue;
         action.ParseAction(input);
         if (currentRoom.Obstacle != null)
-            switch (action.Action)
-            {
-                case 1:
-                    try
-                    {
-                        currentRoom.Cleared = currentRoom.Obstacle.MoveObstacle(player);
-                        gameOver = !currentRoom.Cleared;
-                        if (gameOver) Console.WriteLine(currentRoom.Obstacle.FailMessage);
-                        else Console.WriteLine(currentRoom.Obstacle.ClearedMessage);
-                        continue;
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        continue;
-                    }
-                case 2:
-                    try
-                    {
-                        currentRoom.Cleared = currentRoom.Obstacle.AttackObstacle(player);
-                        gameOver = !currentRoom.Cleared;
-                        if (gameOver) Console.WriteLine(currentRoom.Obstacle.FailMessage);
-                        else Console.WriteLine(currentRoom.Obstacle.ClearedMessage);
-                        continue;
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        continue;
-                    }
-                case 3:
-                    try
-                    {
-                        currentRoom.Cleared = currentRoom.Obstacle.TalkToObstacle(player);
-                        gameOver = !currentRoom.Cleared;
-                        if (gameOver) Console.WriteLine(currentRoom.Obstacle.FailMessage);
-                        else Console.WriteLine(currentRoom.Obstacle.ClearedMessage);
-                        continue;
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        continue;
-                    }
-                case 4:
-                    try
-                    {
-                        currentRoom.Cleared = currentRoom.Obstacle.DodgeObstacle(player);
-                        gameOver = !currentRoom.Cleared;
-                        if (gameOver) Console.WriteLine(currentRoom.Obstacle.FailMessage);
-                        else Console.WriteLine(currentRoom.Obstacle.ClearedMessage);
-                        continue;
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        continue;
-                    }
-                case 5:
-                    currentRoom.Examine(player);
-                    continue;
-                case 6:
-                    Console.WriteLine(action.Help);
-                    continue;
-                default:
-                    Console.WriteLine("I couldn't quite understand what you wanted.\nTry again, or type help for some help!");
-                    continue;
-            }
+        {
+            currentRoom.RunObstacleLogic(player, action, ref gameOver);
+        }
+        if (gameOver) continue;
     }
     if (currentRoom != null && currentRoom.Obstacle != null && !currentRoom.Obstacle.Treasure.Equipped)
     {
         Console.WriteLine("Do you want to take the item?");
-        input = Console.ReadLine();
-        if (input == null || input.Length <= 0)
+        input = Console.ReadLine()?.Trim();
+        if (String.IsNullOrEmpty(input))
         {
             Console.WriteLine("Just a simple yes or no will do.");
             continue;
@@ -263,8 +199,8 @@ while (currentRoom?.Next != null && !gameOver)
         }
     }
     Console.WriteLine("You can move on now, if you wish.");
-    input = Console.ReadLine();
-    if (input == null || input.Length <= 0)
+    input = Console.ReadLine()?.Trim();
+    if (String.IsNullOrEmpty(input))
     {
         Console.WriteLine("Just tell me if you want to move forward down into the dungeon.");
         continue;

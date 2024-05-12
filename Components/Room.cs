@@ -202,6 +202,84 @@ public class Room
             return;
         }
     }
+    /// <summary>
+    /// The main method that runs the obstacle logic.
+    /// </summary>
+    /// <param name="player">The player is the current player object.</param>
+    /// <param name="Actions">the Actions is the current player actions parsed.</param>
+    /// <param name="gameOver">The main bool game over. called as a reference so the method knows what to manipulate.</param>
+    public void RunObstacleLogic(Player player, PlayerActions Actions, ref bool gameOver)
+    {
+        if (Obstacle == null) return;
+        switch (Actions.Action)
+        {
+            case 1:
+                try
+                {
+                    Cleared = Obstacle.MoveObstacle(player);
+                    gameOver = !Cleared;
+                    if (gameOver) Console.WriteLine(Obstacle.FailMessage);
+                    else Console.WriteLine(Obstacle.ClearedMessage);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    break;
+                }
+            case 2:
+                try
+                {
+                    Cleared = Obstacle.AttackObstacle(player);
+                    gameOver = !Cleared;
+                    if (gameOver) Console.WriteLine(Obstacle.FailMessage);
+                    else Console.WriteLine(Obstacle.ClearedMessage);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    break;
+                }
+            case 3:
+                try
+                {
+                    Cleared = Obstacle.TalkToObstacle(player);
+                    gameOver = !Cleared;
+                    if (gameOver) Console.WriteLine(Obstacle.FailMessage);
+                    else Console.WriteLine(Obstacle.ClearedMessage);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    break;
+                }
+            case 4:
+                try
+                {
+                    Cleared = Obstacle.DodgeObstacle(player);
+                    gameOver = !Cleared;
+                    if (gameOver) Console.WriteLine(Obstacle.FailMessage);
+                    else Console.WriteLine(Obstacle.ClearedMessage);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    break;
+                }
+            case 5:
+                Examine(player);
+                break;
+            case 6:
+                Console.WriteLine(Actions.Help);
+                break;
+            default:
+                Console.WriteLine("I couldn't quite understand what you wanted.\nTry again, or type help for some help!");
+                break;
+        }
+    }
 }
 /* The dungeon layout is a doubly linked list. Where each room referes to the previous and the next room. the Start room is accessible outside. */
 public class DungeonLayout
