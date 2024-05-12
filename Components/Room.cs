@@ -66,7 +66,6 @@ public class Obstacle
     /// <param name="name">The name of the obstacle</param>
     /// <param name="desc">A description of the obstacle, presented to the player</param>
     /// <param name="diff">Int, how difficult is it (keep the number lower than 5 for a "fair" experience.</param>
-    /// <param name="attr">What attribute should the player use to overcome it, 1 is strength, 2 is agility, 3 is wit.</param>
     /// <param name="exdesc">When examined, what do the player spot, describe how examining made the obstacle easier to overcome.</param>
     /// <param name="treasure">This is the treasure object associated with the Obstacle</param>
     /// <param name="cleared">The message presented to the player if the obstacle is cleared.</param>
@@ -75,12 +74,11 @@ public class Obstacle
     /// <param name="talk">Can it be talked to?</param>
     /// <param name="dodge">Can the player dodge it?</param>
     /// <param name="mov">Can the player move it?</param>
-    public Obstacle(string name, string desc, int diff, int attr, string exdesc, Treasure treasure, string cleared, string fail, bool attk = false, bool talk = false, bool dodge = false, bool mov = false)
+    public Obstacle(string name, string desc, int diff, string exdesc, Treasure treasure, string cleared, string fail, bool attk = false, bool talk = false, bool dodge = false, bool mov = false)
     {
         Name = name;
         Description = desc;
         Difficulty = diff;
-        Attribute = attr;
         ExaminedDescription = exdesc;
         Treasure = treasure;
         Attackable = attk;
@@ -89,29 +87,6 @@ public class Obstacle
         Moveable = mov;
         ClearedMessage = cleared;
         FailMessage = fail;
-    }
-    /// <summary>
-    /// Denne funksjonen tar in et player object, og ser på int Attribute på obstacle den er tilknyttet. 
-    /// Den tar så en skillskjekk mellom Player og difficulty til objectet.
-    /// </summary>
-    /// <param name="player"></param>
-    /// <returns></returns>
-    public bool OvercomeObstacle(Player player)
-    {
-        int playerAttribute = 0;
-        switch (Attribute)
-        {
-            case 1:
-                playerAttribute = player.Strength;
-                break;
-            case 2:
-                playerAttribute = player.Agility;
-                break;
-            case 3:
-                playerAttribute = player.Wit;
-                break;
-        }
-        return SkillCheck.RollSkillCheck(playerAttribute, Difficulty);
     }
     /// <summary>
     /// Function that tries to attack the obstacle using a player object. Throws an exception if the obstacle is non-attackable.
@@ -123,7 +98,7 @@ public class Obstacle
     {
         if (Attackable)
         {
-            return OvercomeObstacle(player);
+            return SkillCheck.RollSkillCheck(player.Strength, Difficulty);
         }
         else
         {
@@ -140,7 +115,7 @@ public class Obstacle
     {
         if (Talkable)
         {
-            return OvercomeObstacle(player);
+            return SkillCheck.RollSkillCheck(player.Wit, Difficulty);
         }
         else
         {
@@ -157,7 +132,7 @@ public class Obstacle
     {
         if (Dodgeable)
         {
-            return OvercomeObstacle(player);
+            return SkillCheck.RollSkillCheck(player.Agility, Difficulty);
         }
         else
         {
@@ -174,7 +149,7 @@ public class Obstacle
     {
         if (Moveable)
         {
-            return OvercomeObstacle(player);
+            return SkillCheck.RollSkillCheck(player.Strength, Difficulty);
         }
         else
         {
