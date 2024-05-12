@@ -1,6 +1,7 @@
 ﻿using Components.Utilities;
 using Components.Room;
 using Components.Player;
+using System.Collections;
 
 
 PlayerActions action = new();
@@ -9,10 +10,11 @@ DungeonLayout dungeon = new();
 
 Player player = new();
 dungeon.AddRoomEnd("You stand in the kitchen.\nBehind the butcher's table there seems to indeed be an old, steep, stairwell going down into the darkness below.", new Obstacle(
+        name: "The Sharp Mess",
         desc: "Dangerous tools and rusty instruments lie strewn all over this kitchen, one wrong move and it could go very bad.\nSomething is tied to the stairs, it flutters in a light breeze.",
         diff: 2,
         attr: 2,
-        exdesc: "You plot a good route through the maze of rust and sharp stuff. You feel ready to move on.",
+        exdesc: "You plot a good route through the maze of rust and sharp stuff. You feel ready to navigate the maze of dangerous and sharp objects.",
         treasure: new Treasure(
             "A purple cape flutters in a faint breeze. It seems to have a will of its own.",
             3,
@@ -25,6 +27,7 @@ dungeon.AddRoomEnd("You stand in the kitchen.\nBehind the butcher's table there 
         fail: "You decide to just go for it, and sprints through the kitchen. You slip on some leftover, old veal.\nAfter you slide through the disregarded and broken kitchenutensils there's little to no difference between you,\nand the minced meat they serve in the stew.\n'Now that really makes me think' you say to yourself as the world fade to black."
     ));
 dungeon.AddRoomEnd("A dank and decrepit cellar. The stank of rot fills your nostrils.", new Obstacle(
+        name: "The Vat",
         desc: "A large vat of some unspeakable gunk blocks your path.\nBelow the vat lies some unfortunate creature who probably attempted the same feat you are about to.",
         diff: 3,
         attr: 1,
@@ -41,6 +44,7 @@ dungeon.AddRoomEnd("A dank and decrepit cellar. The stank of rot fills your nost
         fail: "For a moment the huge var seems to give way, but then it rolls back over, trapping your leg.\nIt seems you will share the same faith as whoever or whatever else lies trapped down here with you."
     ));
 dungeon.AddRoomEnd("A cold chill creeps through you when you stand in this long forgotten stony hallway, deep below. Your footsteps echo down this rocky tomb", new Obstacle(
+        name: "The Hallway",
         desc: "The walls seem brittle and frail. As they would fall at any moment.",
         diff: 3,
         attr: 2,
@@ -59,6 +63,7 @@ dungeon.AddRoomEnd("A cold chill creeps through you when you stand in this long 
 dungeon.AddRoomEnd(
     "You stand in a large circular stone room.\nOld runes are carved into the stone surrounding you.\nYou see no exit, and the way you came in is now blocked. A soft clank reverberates through the hall.",
     new Obstacle(
+        name: "The Lever",
         desc: "An old mechanism seems to block your path forward. It seems partly stuck,\nyet the lever that operates it feels like it could give if you just push harder.",
         diff: 3,
         attr: 1,
@@ -77,6 +82,7 @@ dungeon.AddRoomEnd(
 );
 dungeon.AddRoomEnd(
     "This room contains a large chasm, as if a blade once pierced the ground.\nBelow is nothing but darkness.", new Obstacle(
+        name: "The Bridge",
         desc: "A long, and spindly bridge spans the chasm.\nAt the other side you see a faint light promising freedom!",
         diff: 4,
         attr: 2,
@@ -94,6 +100,7 @@ dungeon.AddRoomEnd(
 );
 
 dungeon.AddRoomStart("You stand in a tarvern, slightly enebriated. You heard rumours of a hidden stairwell in the kitchens of this tavern.", new Obstacle(
+        name: "The Drunk",
         desc: "A old drunk blocks your way. He is armed, but doesn't seem to know so himself.",
         diff: 3,
         attr: 3,
@@ -113,13 +120,13 @@ dungeon.AddRoomStart("You stand in a tarvern, slightly enebriated. You heard rum
 dungeon.AddRoomEnd("This is the end of your journey.");
 Console.WriteLine("Welcome to Delve the dungeon.");
 Console.WriteLine("Before we begin this adventure, please tell me your name:");
-string? nameInput = Console.ReadLine();
-while (nameInput != null && nameInput.Length <= 0)
+string input = Console.ReadLine();
+while (input != null && input.Length <= 0)
 {
     Console.WriteLine("\nYou can tell me your name. Any name really. It's okay, you can lie to me.");
-    nameInput = Console.ReadLine();
+    input = Console.ReadLine();
 }
-if (nameInput != null) player.Name = nameInput;
+if (input != null) player.Name = input;
 Console.WriteLine("Good. Now let's make you better.\n\n");
 await Task.Delay(250);
 
@@ -149,7 +156,12 @@ while (player.Points > 0)
 
 Room? currentRoom = dungeon.Start;
 bool gameOver = false;
-while (currentRoom?.Next != null && !gameOver)
+if (currentRoom == null)
+{
+    Console.WriteLine("Something went very wrong building the dungeon.");
+    return;
+}
+while (currentRoom.Next != null && !gameOver)
 {
     Console.WriteLine($"{currentRoom.Description}");
     await Task.Delay(250);
@@ -157,131 +169,144 @@ while (currentRoom?.Next != null && !gameOver)
     await Task.Delay(250);
     Console.WriteLine("For a quick introduction to how this work, try typing 'help me!'(or just help) for some simple guidance");
     await Task.Delay(250);
-    Console.WriteLine("What do you want to do?");
-    string? input = Console.ReadLine();
-    if (input == null) continue;
-    else
+    while (currentRoom != null && !currentRoom.Cleared)
     {
+        Console.WriteLine("What do you want to do?");
+        input = Console.ReadLine();
+        if (input == null || input.Length <= 0) continue;
         action.ParseAction(input);
-        if (action.Action == 0) continue;
-        if (currentRoom != null && !currentRoom.Cleared)
+        if (currentRoom.Obstacle != null)
+            switch (action.Action)
+            {
+                case 1:
+                    try
+                    {
+                        currentRoom.Cleared = currentRoom.Obstacle.MoveObstacle(player);
+                        gameOver = !currentRoom.Cleared;
+                        if (gameOver) Console.WriteLine(currentRoom.Obstacle.FailMessage);
+                        else Console.WriteLine(currentRoom.Obstacle.ClearedMessage);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        break;
+                    }
+                case 2:
+                    try
+                    {
+                        currentRoom.Cleared = currentRoom.Obstacle.AttackObstacle(player);
+                        gameOver = !currentRoom.Cleared;
+                        if (gameOver) Console.WriteLine(currentRoom.Obstacle.FailMessage);
+                        else Console.WriteLine(currentRoom.Obstacle.ClearedMessage);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        break;
+                    }
+                case 3:
+                    try
+                    {
+                        currentRoom.Cleared = currentRoom.Obstacle.TalkToObstacle(player);
+                        gameOver = !currentRoom.Cleared;
+                        if (gameOver) Console.WriteLine(currentRoom.Obstacle.FailMessage);
+                        else Console.WriteLine(currentRoom.Obstacle.ClearedMessage);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        break;
+                    }
+                case 4:
+                    try
+                    {
+                        currentRoom.Cleared = currentRoom.Obstacle.DodgeObstacle(player);
+                        gameOver = !currentRoom.Cleared;
+                        if (gameOver) Console.WriteLine(currentRoom.Obstacle.FailMessage);
+                        else Console.WriteLine(currentRoom.Obstacle.ClearedMessage);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        break;
+                    }
+                case 5:
+                    currentRoom.Examine(player);
+                    break;
+                case 6:
+                    Console.WriteLine(action.Help);
+                    break;
+            }
+    }
+    if (currentRoom != null && currentRoom.Obstacle != null && !currentRoom.Obstacle.Treasure.Equipped)
+    {
+        Console.WriteLine("Do you want to take the item?");
+        input = Console.ReadLine();
+        if (input == null || input.Length <= 0)
         {
-            if (action.Action == 5)
-            {
-                currentRoom.Examine(player);
-                await Task.Delay(250);
-                continue;
-            }
-            if (action.Action == 6)
-            {
-                Console.WriteLine(action.Help);
-                await Task.Delay(250);
-                continue;
-            }
-            bool canUseAction = currentRoom.CanClearObstacle(action.Action);
-            if (!canUseAction)
-            {
-                Console.WriteLine("Cannot do that to get past this obstacle.");
-                await Task.Delay(250);
-                continue;
-            }
-            if (currentRoom.Obstacle != null)
-            {
-                bool didObstacle = currentRoom.Obstacle.OvercomeObstacle(player);
-                if (!didObstacle)
-                {
-                    Console.WriteLine(currentRoom.Obstacle.FailMessage);
-                    await Task.Delay(250);
-                    gameOver = true;
-                }
-                else
-                {
-                    Console.WriteLine(currentRoom.Obstacle.ClearedMessage);
-                    await Task.Delay(250);
-                    Console.WriteLine(currentRoom.Obstacle.Treasure.Description);
-                    await Task.Delay(250);
-                    Console.WriteLine("Do you want to equip the treasure?");
-                    await Task.Delay(250);
-                    input = Console.ReadLine();
-                    if (input != null)
-                    {
-                        action.ParseAction(input);
-                        if (action.Action != 7)
-                        {
-                            Console.WriteLine("Very well!");
-                            await Task.Delay(250);
-                            currentRoom.Cleared = true;
-                            continue;
-                        }
-                        else
-                        {
-                            currentRoom.Obstacle.Treasure.EquipReward(player);
-                            currentRoom.Cleared = true;
-                            continue;
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Indecisive, huh? We'll discard this item for now.");
-                        currentRoom.Cleared = true;
-                        await Task.Delay(250);
-                        continue;
-                    }
-                }
-            }
-
+            Console.WriteLine("Just a simple yes or no will do.");
+            continue;
+        }
+        action.ParseAction(input);
+        if (action.Action != 7)
+        {
+            Console.WriteLine("Very well. No item for you.");
         }
         else
         {
-            if (action.Action == 1)
+            currentRoom.Obstacle.Treasure.EquipReward(player);
+        }
+    }
+    Console.WriteLine("You can move on now, if you wish.");
+    input = Console.ReadLine();
+    if (input == null || input.Length <= 0)
+    {
+        Console.WriteLine("Just tell me if you want to move forward down into the dungeon.");
+        continue;
+    }
+    action.ParseAction(input);
+    if (action.Action != 1)
+    {
+        Console.WriteLine("Now is not the time for stuff like this.");
+        continue;
+    }
+    else
+    {
+        if (action.Target == 1)
+        {
+            if (currentRoom.Prev != null)
             {
-                if (action.Target == 1)
-                {
-                    if (currentRoom?.Prev != null)
-                    {
-                        currentRoom = currentRoom.Prev;
-                        await Task.Delay(250);
-                        continue;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Cannot go this way.");
-                        await Task.Delay(250);
-                        continue;
-                    }
-                }
-                else if (action.Target == 2)
-                {
-                    if (currentRoom?.Next != null)
-                    {
-                        currentRoom = currentRoom.Next;
-                        await Task.Delay(250);
-                        continue;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Cannot go this way.");
-                        await Task.Delay(250);
-                        continue;
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("That's not a valid direction.");
-                    await Task.Delay(250);
-                    continue;
-                }
+                currentRoom = currentRoom.Prev;
             }
             else
             {
-                Console.WriteLine("There's nothing else to do in this room, better move on.");
-                await Task.Delay(250);
+                Console.WriteLine("Cannot go there.");
                 continue;
             }
         }
+        else if (action.Target == 2)
+        {
+            if (currentRoom.Next != null)
+            {
+                currentRoom = currentRoom.Next;
+            }
+            else
+            {
+                Console.WriteLine("Cannot go there.");
+                continue;
+            }
+        }
+        else
+        {
+            Console.WriteLine("Couldn't parse where you wanted to go. Please try again");
+            continue;
+        }
     }
 }
-currentRoom = dungeon.End;
 Console.WriteLine(currentRoom?.Description);
 Console.WriteLine("Thanks for playing, press any button to exit the game.");
 Console.ReadLine();

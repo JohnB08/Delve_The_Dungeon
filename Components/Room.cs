@@ -9,6 +9,7 @@ public class Treasure
     public int Attribute { get; set; }
     public int Reward { get; set; }
     public string EquipDesc { get; set; }
+    public bool Equipped { get; set; } = false;
     public Treasure(string desc, int attr, int rew, string eqdesc)
     {
         Description = desc;
@@ -30,11 +31,13 @@ public class Treasure
                 player.Wit += Reward;
                 break;
         }
+        Equipped = true;
         Console.WriteLine($"{EquipDesc}");
     }
 }
 public class Obstacle
 {
+    public string Name { get; set; }
     public string Description { get; set; }
     public int Difficulty { get; set; }
     public int Attribute { get; set; }
@@ -46,8 +49,9 @@ public class Obstacle
     public bool Dodgeable { get; set; }
     public string ClearedMessage { get; set; }
     public string FailMessage { get; set; }
-    public Obstacle(string desc, int diff, int attr, string exdesc, Treasure treasure, string cleared, string fail, bool attk = false, bool talk = false, bool dodge = false, bool mov = false)
+    public Obstacle(string name, string desc, int diff, int attr, string exdesc, Treasure treasure, string cleared, string fail, bool attk = false, bool talk = false, bool dodge = false, bool mov = false)
     {
+        Name = name;
         Description = desc;
         Difficulty = diff;
         Attribute = attr;
@@ -78,7 +82,52 @@ public class Obstacle
         }
         return SkillCheck.RollSkillCheck(playerAttribute, Difficulty);
     }
+    public bool AttackObstacle(Player player)
+    {
+        if (Attackable)
+        {
+            return OvercomeObstacle(player);
+        }
+        else
+        {
+            throw new InvalidOperationException($"You cannot attack {Name}");
+        }
+    }
+    public bool TalkToObstacle(Player player)
+    {
+        if (Talkable)
+        {
+            return OvercomeObstacle(player);
+        }
+        else
+        {
+            throw new InvalidOperationException($"You cannot talk to {Name}");
+        }
+    }
+    public bool DodgeObstacle(Player player)
+    {
+        if (Dodgeable)
+        {
+            return OvercomeObstacle(player);
+        }
+        else
+        {
+            throw new InvalidOperationException($"Dodging {Name} didn't accomplish anything.");
+        }
+    }
+    public bool MoveObstacle(Player player)
+    {
+        if (Moveable)
+        {
+            return OvercomeObstacle(player);
+        }
+        else
+        {
+            throw new InvalidOperationException($"You cannot move {Name}");
+        }
+    }
 }
+
 
 public class Room
 {
@@ -113,29 +162,6 @@ public class Room
             Examined = true;
             return;
         }
-    }
-    public bool CanClearObstacle(int action)
-    {
-        bool obstacleClearable = false;
-        if (Obstacle != null)
-        {
-            switch (action)
-            {
-                case 1:
-                    obstacleClearable = Obstacle.Moveable;
-                    break;
-                case 2:
-                    obstacleClearable = Obstacle.Attackable;
-                    break;
-                case 3:
-                    obstacleClearable = Obstacle.Talkable;
-                    break;
-                case 4:
-                    obstacleClearable = Obstacle.Dodgeable;
-                    break;
-            }
-        }
-        return obstacleClearable;
     }
 }
 

@@ -6,6 +6,14 @@ public class Player
     public int Agility { get; set; }
     public int Wit { get; set; }
     public int Points { get; private set; } = 3;
+
+    /// <summary>
+    /// En funksjon som leser player input, og increaser Player.Stats alt ettersom hva de velger.
+    /// Bruker Player.Points som limit for hvor mange ganger spilleren kan gjøre det.
+    /// </summary>
+    /// <param name="stat"></param>
+    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="InvalidOperationException"></exception>
     public void AddPointsToStats(string stat)
     {
         if (Points > 0)
