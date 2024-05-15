@@ -28,7 +28,7 @@ public class Treasure
     /// A function that equips the item to the player, increasing (or decreasing) the affected attribute.
     /// </summary>
     /// <param name="player"></param>
-    public void EquipReward(Player player)
+    public async Task EquipReward(Player player)
     {
         switch (Attribute)
         {
@@ -43,7 +43,7 @@ public class Treasure
                 break;
         }
         Equipped = true;
-        Console.WriteLine($"{EquipDesc}");
+        await GameMessage.PrintMessage(EquipDesc, 25);
     }
 }
 public class Obstacle

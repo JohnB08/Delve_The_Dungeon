@@ -164,7 +164,7 @@ while (currentRoom?.Next != null && !game.GameOver)
 {
     await GameMessage.PrintMessage($"{currentRoom.Description}", 25);
     if (!currentRoom.Cleared) await GameMessage.PrintMessage($"{currentRoom?.Obstacle?.Description}", 25);
-    await GameMessage.PrintMessage("For a quick introduction to how this work, try typing 'help me!'(or just help) for some simple guidance", 25);
+    if (currentRoom == dungeon.Start) await GameMessage.PrintMessage("For a quick introduction to how this work, try typing 'help me!'(or just help) for some simple guidance", 25);
     while (currentRoom != null && !currentRoom.Cleared && !game.GameOver)
     {
         await GameMessage.PrintMessage("What do you want to do?", 25);
@@ -187,13 +187,13 @@ while (currentRoom?.Next != null && !game.GameOver)
             continue;
         }
         action.ParseAction(input);
-        if (action.Affirmation != 1)
+        if (action.Affirmation != 1 && action.Action != 7)
         {
             await GameMessage.PrintMessage("Very well. No item for you.", 25);
         }
         else
         {
-            currentRoom.Obstacle.Treasure.EquipReward(player);
+            await currentRoom.Obstacle.Treasure.EquipReward(player);
         }
     }
     await GameMessage.PrintMessage("You can move on now, if you wish.", 25);
