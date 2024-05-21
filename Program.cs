@@ -5,10 +5,9 @@ using Components.Dungeon;
 
 PlayerActions action = new();
 
-DungeonLayout dungeon = new();
-
+DungeonLayout dungeonList = new();
+Dungeon dungeon = new();
 GameState game = new();
-RoomList rooms = new();
 Player player = new();
 
 await GameMessage.PrintMessage("Welcome to Delve the dungeon.", 25);
@@ -46,15 +45,15 @@ while (player.Points > 0)
         continue;
     }
 }
-foreach (var room in rooms.roomList)
+foreach (var room in dungeon.roomList)
 {
-    dungeon.AddRoomEnd(room.Description, room.Obstacle);
+    dungeonList.AddRoomEnd(room.Description, room.Obstacle);
 }
-dungeon.AddRoomEnd("This is the end of your journey.");
+dungeonList.AddRoomEnd("This is the end of your journey.");
 
 
 
-Room? currentRoom = dungeon.Start;
+Room? currentRoom = dungeonList.Start;
 if (currentRoom == null)
 {
     Console.WriteLine("Something went very wrong building the dungeon.");
@@ -64,7 +63,7 @@ while (currentRoom?.Next != null && !game.GameOver)
 {
     await GameMessage.PrintMessage($"{currentRoom.Description}", 25);
     if (!currentRoom.Cleared) await GameMessage.PrintMessage($"{currentRoom?.Obstacle?.Description}", 25);
-    if (currentRoom == dungeon.Start) await GameMessage.PrintMessage("For a quick introduction to how this work, try typing 'help me!'(or just help) for some simple guidance", 25);
+    if (currentRoom == dungeonList.Start) await GameMessage.PrintMessage("For a quick introduction to how this work, try typing 'help me!'(or just help) for some simple guidance", 25);
     while (currentRoom != null && !currentRoom.Cleared && !game.GameOver)
     {
         await GameMessage.PrintMessage("What do you want to do?", 25);

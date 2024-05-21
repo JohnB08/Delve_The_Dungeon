@@ -1,61 +1,78 @@
 namespace Components.Dungeon;
 using Components.Room;
 
-public class RoomList
+public class Dungeon
 {
-    public List<Room> roomList =
-[
-    new(
-        "You stumble upon a small clearing in the dense forest, where a mystical deer radiates a gentle, ethereal glow.",
-        new Obstacle(
-            "Mystical Deer",
-            "A radiant deer whose presence seems to calm the very air around it.",
-            2,
-            "Upon closer inspection, the deer's antlers shimmer with a subtle sparkle, hinting at hidden magic.",
-            new Treasure("Antler Pendant", 3, 3, "Wearing it, your thoughts quicken and deepen."),
-            "The deer bows its head and steps aside, allowing you access to a hidden grove.",
-            "As you approach hastily, the deer vanishes, and thorny vines rapidly grow, blocking your path permanently.",
-            attk: false, talk: true, dodge: true, mov: false
+    public List<Room> roomList = new List<Room> {
+        new Room(
+            "You enter a dimly lit cavern with stalactites hanging from the ceiling. The air is damp and the ground uneven.",
+            new Obstacle(
+                "Slippery Rocks",
+                "The ground is covered with slippery rocks, making it difficult to move without falling.",
+                3,
+                "Upon closer inspection, you notice a pattern in the rocks, revealing a safer path.",
+                new Treasure("Agility Potion", 2, 2, "You feel lighter and quicker after drinking the potion."),
+                "You navigate the treacherous ground successfully and find a small vial.",
+                "You slip and fall, hitting your head on a rock. You lose consciousness.",
+                mov: true,
+                dodge: true
+            )
+        ),
+        new Room(
+            "A narrow passageway leads you to an underground river. The water is dark and swift.",
+            new Obstacle(
+                "Raging River",
+                "The river is too strong to swim across without some aid.",
+                4,
+                "You spot some sturdy vines hanging from the ceiling that could be used to swing across.",
+                new Treasure("Strength Elixir", 1, 3, "You feel your muscles swell with newfound strength."),
+                "You manage to cross the river using the vines, finding a small bottle on the other side.",
+                "You are swept away by the current, struggling helplessly as the water engulfs you.",
+                mov: true,
+                attk: true
+            )
+        ),
+        new Room(
+            "The passage opens up into a large chamber with a high ceiling. There's a faint light coming from a hole above.",
+            new Obstacle(
+                "Fallen Debris",
+                "A pile of heavy debris blocks your way forward.",
+                2,
+                "Upon examining, you notice that some of the debris can be moved aside to create a path.",
+                new Treasure("Golden Key", 3, 1, "The key feels ancient and valuable."),
+                "You clear the debris and discover a golden key among the rubble.",
+                "You are unable to move the debris, and your efforts are in vain.",
+                mov: true,
+                talk: true
+            )
+        ),
+        new Room(
+            "You find yourself in a room with walls covered in intricate carvings. The carvings seem to depict an ancient story.",
+            new Obstacle(
+                "Ancient Puzzle",
+                "The carvings form a complex puzzle that needs to be solved to proceed.",
+                3,
+                "Careful examination reveals clues hidden in the carvings that simplify the puzzle.",
+                new Treasure("Wit's Amulet", 3, 2, "You feel your mind sharpen as you put on the amulet."),
+                "You solve the puzzle, and a hidden compartment opens, revealing a shining amulet.",
+                "You are unable to solve the puzzle, and the room remains sealed.",
+                talk: true,
+                attk: true
+            )
+        ),
+        new Room(
+            "A cold wind blows as you step into a large, open chamber. In the center, there is a pedestal with a glowing orb.",
+            new Obstacle(
+                "Guardian Statue",
+                "A statue of a fierce guardian blocks access to the orb, coming to life as you approach.",
+                5,
+                "You notice that the statue has weak points in its structure.",
+                new Treasure("Orb of Wisdom", 3, 3, "Holding the orb, you feel a surge of clarity and insight."),
+                "You defeat the guardian statue, and the glowing orb is now within your reach.",
+                "The guardian strikes you down with its mighty blows, and darkness consumes you.",
+                attk: true,
+                dodge: true
+            )
         )
-    ),
-    new(
-        "A cavern echoing with the sound of dripping water opens up to reveal walls glittering with crystals. A large crystal cluster blocks the passage ahead.",
-        new Obstacle(
-            "Crystal Cluster",
-            "A dazzling, almost blinding cluster of sharp crystals obstructing the way.",
-            4,
-            "Examining the cluster reveals its structure is more fragile than it appears, suggesting it could be carefully dismantled.",
-            new Treasure("Crystal Shard", 2, 2, "As you hold the shard, your movements become swifter."),
-            "With careful manipulation, the crystals are dislodged, clearing the path forward.",
-            "In a reckless attempt to break through, a crystal shard ricochets and strikes you fatally.",
-            attk: true, talk: false, dodge: false, mov: true
-        )
-    ),
-    new(
-        "At the heart of a ruined palace, a throne room lays forgotten. Seated upon the throne is a spectral king, gazing mournfully into the distance.",
-        new Obstacle(
-            "Spectral King",
-            "A ghostly monarch bound to his throne, his presence fills the air with sorrow and cold.",
-            3,
-            "Upon closer observation, you notice a crown that seems to pulse with a dim light.",
-            new Treasure("Royal Seal", 1, 5, "Clutching the seal, you feel your strength surge."),
-            "The spectral king acknowledges your respect and vanishes, leaving his crown behind.",
-            "Disturbing the spectral king enrages him, unleashing a fury that freezes you to your core.",
-            attk: false, talk: true, dodge: false, mov: false
-        )
-    ),
-    new(
-        "Deep within the jungle, you find an ancient altar surrounded by stone idols. One idol suddenly animates, its eyes glowing ominously.",
-        new Obstacle(
-            "Animated Idol",
-            "A stone idol imbued with ancient magic, blocking access to the sacred altar.",
-            3,
-            "You spot a sequence of symbols at the base of the idol, perhaps a clue to deactivating its magic.",
-            new Treasure("Idol's Heart", 1, 3, "Your muscles tense with newfound power as you grasp the heart."),
-            "The idol's magic dissipates, and it returns to inert stone, clearing the way to the altar.",
-            "Attempting to bypass the idol triggers a deadly trap, sealing your fate with no escape.",
-            attk: true, talk: false, dodge: true, mov: false
-        )
-    )
-];
+    };
 }
