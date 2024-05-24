@@ -53,6 +53,7 @@ public class Obstacle
     public int Difficulty { get; set; }
     public int Attribute { get; set; }
     public string ExaminedDescription { get; set; }
+    public string TasteDescription { get; set; }
     public Treasure Treasure { get; set; }
     public bool Moveable { get; set; }
     public bool Attackable { get; set; }
@@ -66,6 +67,7 @@ public class Obstacle
     /// <param name="name">The name of the obstacle</param>
     /// <param name="desc">A description of the obstacle, presented to the player</param>
     /// <param name="diff">Int, how difficult is it (keep the number lower than 5 for a "fair" experience.</param>
+    /// <param name="tastedesc"> string, what does the obstacle taste like, be descriptive! 
     /// <param name="exdesc">When examined, what do the player spot, describe how examining made the obstacle easier to overcome.</param>
     /// <param name="treasure">This is the treasure object associated with the Obstacle</param>
     /// <param name="cleared">The message presented to the player if the obstacle is cleared.</param>
@@ -74,7 +76,7 @@ public class Obstacle
     /// <param name="talk">Can it be talked to?</param>
     /// <param name="dodge">Can the player dodge it?</param>
     /// <param name="mov">Can the player move it?</param>
-    public Obstacle(string name, string desc, int diff, string exdesc, Treasure treasure, string cleared, string fail, bool attk = false, bool talk = false, bool dodge = false, bool mov = false)
+    public Obstacle(string name, string desc, int diff, string tastedesc, string exdesc, Treasure treasure, string cleared, string fail, bool attk = false, bool talk = false, bool dodge = false, bool mov = false)
     {
         Name = name;
         Description = desc;
@@ -82,6 +84,7 @@ public class Obstacle
         ExaminedDescription = exdesc;
         Treasure = treasure;
         Attackable = attk;
+        TasteDescription = tastedesc;
         Talkable = talk;
         Dodgeable = dodge;
         Moveable = mov;
@@ -270,6 +273,9 @@ public class Room
                 return false;
             case 6:
                 await GameMessage.PrintMessage(Actions.Help, 25);
+                return false;
+            case 8:
+                await GameMessage.PrintMessage(Obstacle.TasteDescription, 25);
                 return false;
             default:
                 await GameMessage.PrintMessage("I couldn't quite understand what you wanted.\nTry again, or type help for some help!", 25);

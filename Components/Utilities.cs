@@ -35,7 +35,7 @@ Help is tied to 6
 */
 public class PlayerActions
 {
-    public Dictionary<string, int> Actions = new Dictionary<string, int> { { "move", 1 }, { "go", 1 }, { "run", 4 }, { "walk", 1 }, { "attack", 2 }, { "fight", 2 }, { "hit", 2 }, { "look", 5 }, { "examine", 5 }, { "spy", 5 }, { "scry", 5 }, { "talk", 3 }, { "yell", 3 }, { "whisper", 3 }, { "fool", 3 }, { "ruse", 3 }, { "dodge", 4 }, { "roll", 4 }, { "evade", 4 }, { "avoid", 4 }, { "trick", 3 }, { "help", 6 }, { "h", 6 }, { "hjelp", 6 }, { "lift", 1 }, { "jump", 4 }, { "grab", 7 }, { "take", 7 }, { "hold", 7 }, { "fetch", 7 } };
+    public Dictionary<string, int> Actions = new Dictionary<string, int> { { "move", 1 }, { "go", 1 }, { "run", 4 }, { "walk", 1 }, { "attack", 2 }, { "fight", 2 }, { "hit", 2 }, { "look", 5 }, { "examine", 5 }, { "spy", 5 }, { "scry", 5 }, { "talk", 3 }, { "yell", 3 }, { "whisper", 3 }, { "fool", 3 }, { "ruse", 3 }, { "dodge", 4 }, { "roll", 4 }, { "evade", 4 }, { "avoid", 4 }, { "trick", 3 }, { "help", 6 }, { "h", 6 }, { "hjelp", 6 }, { "lift", 1 }, { "jump", 4 }, { "grab", 7 }, { "take", 7 }, { "hold", 7 }, { "fetch", 7 }, { "lick", 8 }, { "taste", 8 } };
     public Dictionary<string, int> Targets = new Dictionary<string, int> { { "north", 1 }, { "backwards", 1 }, { "up", 1 }, { "south", 2 }, { "down", 2 }, { "forward", 2 }, { "on", 2 }, { "back", 1 }, { "onwards", 2 } };
     public Dictionary<string, int> Affirmative = new Dictionary<string, int> { { "yes", 1 }, { "y", 1 }, { "aye", 1 }, { "ye", 1 }, { "ja", 1 }, { "yeah", 1 }, { "no", 2 }, { "n", 2 }, { "nay", 2 }, { "nei", 2 }, { "nah", 2 }, { "sure", 1 } };
     public int Action { get; private set; }
